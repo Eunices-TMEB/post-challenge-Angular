@@ -35,17 +35,52 @@
     z-index: 2;
     
     .rank-badge {
-      background: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.15) 0%, 
+        rgba(255, 255, 255, 0.05) 100%);
+      backdrop-filter: blur(20px) saturate(200%) brightness(1.1);
+      -webkit-backdrop-filter: blur(20px) saturate(200%) brightness(1.1);
       color: rgba(255, 255, 255, 0.95);
       padding: 6px 16px;
       border-radius: 20px;
       font-weight: 700;
       font-size: 14px;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2),
-                  inset 0 1px 0 rgba(255, 255, 255, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.15),
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+      border: 1.5px solid rgba(167, 139, 250, 0.5);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      
+      // Reflejo de cristal
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 50%;
+        background: linear-gradient(180deg, 
+          rgba(255, 255, 255, 0.2) 0%, 
+          transparent 100%);
+        pointer-events: none;
+      }
+      
+      &:hover {
+        background: linear-gradient(135deg, 
+          rgba(255, 255, 255, 0.25) 0%, 
+          rgba(255, 255, 255, 0.1) 100%);
+        border-color: rgba(196, 181, 253, 0.7);
+        transform: scale(1.05);
+        box-shadow: 
+          0 6px 20px rgba(139, 92, 246, 0.25),
+          0 10px 40px rgba(0, 0, 0, 0.15),
+          inset 0 1px 0 rgba(255, 255, 255, 0.5),
+          inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+      }
     }
     
     .action-buttons {
@@ -53,37 +88,106 @@
       gap: 8px;
       
       button {
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: linear-gradient(135deg, 
+          rgba(255, 255, 255, 0.15) 0%, 
+          rgba(255, 255, 255, 0.05) 100%);
+        backdrop-filter: blur(20px) saturate(200%) brightness(1.1);
+        -webkit-backdrop-filter: blur(20px) saturate(200%) brightness(1.1);
+        box-shadow: 
+          0 4px 16px rgba(0, 0, 0, 0.15),
+          0 8px 32px rgba(0, 0, 0, 0.1),
+          inset 0 1px 0 rgba(255, 255, 255, 0.4),
+          inset 0 -1px 0 rgba(0, 0, 0, 0.1);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
         
-        &:hover {
-          background: rgba(255, 255, 255, 0.25);
-          border-color: rgba(255, 255, 255, 0.3);
-          transform: scale(1.15);
-          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25),
-                      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        // Reflejo de cristal
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 50%;
+          background: linear-gradient(180deg, 
+            rgba(255, 255, 255, 0.2) 0%, 
+            transparent 100%);
+          pointer-events: none;
         }
         
         mat-icon {
           font-size: 20px;
+          filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+          position: relative;
+          z-index: 1;
+        }
+        
+        &:hover {
+          background: linear-gradient(135deg, 
+            rgba(255, 255, 255, 0.25) 0%, 
+            rgba(255, 255, 255, 0.1) 100%);
+          transform: scale(1.15);
+          box-shadow: 
+            0 6px 20px rgba(0, 0, 0, 0.2),
+            0 10px 40px rgba(0, 0, 0, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.5),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.15);
         }
       }
       
-      .edit-button mat-icon {
-        color: rgba(255, 255, 255, 0.9);
+      // Botón EDITAR - Borde Azul
+      .edit-button {
+        border: 1.5px solid rgba(96, 165, 250, 0.6) !important;
+        
+        mat-icon {
+          color: rgba(191, 219, 254, 1) !important;
+        }
+        
+        &:hover {
+          border-color: rgba(147, 197, 253, 0.8) !important;
+          box-shadow: 
+            0 6px 20px rgba(59, 130, 246, 0.3),
+            0 10px 40px rgba(0, 0, 0, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.5),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+        }
       }
       
-      .delete-button mat-icon {
-        color: rgba(255, 255, 255, 0.7);
+      // Botón ELIMINAR - Borde Rojo
+      .delete-button {
+        border: 1.5px solid rgba(248, 113, 113, 0.6) !important;
+        
+        mat-icon {
+          color: rgba(254, 202, 202, 1) !important;
+        }
+        
+        &:hover {
+          border-color: rgba(252, 165, 165, 0.8) !important;
+          box-shadow: 
+            0 6px 20px rgba(239, 68, 68, 0.3),
+            0 10px 40px rgba(0, 0, 0, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.5),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+        }
       }
       
-      .imdb-button mat-icon {
-        color: rgba(255, 255, 255, 0.8);
+      // Botón IMDB - Borde Amarillo
+      .imdb-button {
+        border: 1.5px solid rgba(251, 191, 36, 0.6) !important;
+        
+        mat-icon {
+          color: rgba(254, 240, 138, 1) !important;
+        }
+        
+        &:hover {
+          border-color: rgba(253, 224, 71, 0.8) !important;
+          box-shadow: 
+            0 6px 20px rgba(245, 158, 11, 0.3),
+            0 10px 40px rgba(0, 0, 0, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.5),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+        }
       }
     }
   }
@@ -202,23 +306,77 @@
         }
         
         &.rating {
-          background: rgba(255, 255, 255, 0.15);
-          backdrop-filter: blur(10px);
-          -webkit-backdrop-filter: blur(10px);
-          padding: 4px 12px;
-          border-radius: 20px;
-          color: rgba(255, 255, 255, 0.95);
-          font-weight: 700;
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15),
-                      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+          background: linear-gradient(135deg, 
+            rgba(245, 158, 11, 0.95) 0%, 
+            rgba(217, 119, 6, 1) 100%);
+          backdrop-filter: blur(15px) saturate(180%);
+          -webkit-backdrop-filter: blur(15px) saturate(180%);
+          padding: 6px 14px;
+          border-radius: 24px;
+          color: #ffffff;
+          font-weight: 800;
+          border: 2px solid rgba(251, 191, 36, 0.8);
+          box-shadow: 
+            0 4px 16px rgba(245, 158, 11, 0.5),
+            0 2px 8px rgba(0, 0, 0, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.4),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+          transition: all 0.3s ease;
+          position: relative;
+          overflow: hidden;
+          
+          // Reflejo dorado
+          &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(180deg, 
+              rgba(255, 255, 255, 0.3) 0%, 
+              transparent 100%);
+            pointer-events: none;
+          }
           
           .info-icon.star {
-            color: rgba(255, 255, 255, 0.9);
+            color: #ffffff;
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+            animation: starPulse 2s ease-in-out infinite;
           }
           
           .rating-value {
-            font-size: 15px;
+            font-size: 16px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+          }
+          
+          &:hover {
+            background: linear-gradient(135deg, 
+              rgba(251, 191, 36, 1) 0%, 
+              rgba(245, 158, 11, 1) 100%);
+            border-color: rgba(254, 240, 138, 1);
+            transform: scale(1.05);
+            box-shadow: 
+              0 6px 24px rgba(245, 158, 11, 0.7),
+              0 3px 12px rgba(0, 0, 0, 0.4),
+              inset 0 1px 0 rgba(255, 255, 255, 0.5),
+              inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+          }
+        }
+        
+        @keyframes starPulse {
+          0%, 100% {
+            transform: scale(1);
+            opacity: 1;
+          }
+          50% {
+            transform: scale(1.1);
+            opacity: 0.8;
           }
         }
       }

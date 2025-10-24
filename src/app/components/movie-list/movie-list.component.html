@@ -2,7 +2,7 @@
   <!-- Header -->
   <mat-toolbar color="primary" class="toolbar">
     <mat-icon class="toolbar-icon">movie</mat-icon>
-    <span class="toolbar-title">Top 100 Películas IMDB</span>
+    <span class="toolbar-title">Top 100 Películas - Challenge Angular</span>
     <span class="spacer"></span>
     <button mat-raised-button class="reset-button" (click)="resetToOriginal()">
       <mat-icon>refresh</mat-icon>
@@ -42,20 +42,34 @@
     <button mat-raised-button color="primary" (click)="loadMovies()">Reintentar</button>
   </div>
 
-  <!-- Movies Grid -->
-  <div *ngIf="!loading && !error" class="movies-grid">
-    <div *ngIf="filteredMovies.length === 0" class="no-results">
-      <mat-icon>search_off</mat-icon>
-      <p>No se encontraron películas que coincidan con "{{ searchTerm }}"</p>
-      <button mat-raised-button color="primary" (click)="clearSearch()">Limpiar Búsqueda</button>
+  <!-- No Results -->
+  <div *ngIf="!loading && !error && filteredMovies.length === 0" class="no-results">
+    <mat-icon>search_off</mat-icon>
+    <p>No se encontraron películas que coincidan con "{{ searchTerm }}"</p>
+    <button mat-raised-button color="primary" (click)="clearSearch()">Limpiar Búsqueda</button>
+  </div>
+
+  <!-- Movies Grid with Pagination -->
+  <div *ngIf="!loading && !error && filteredMovies.length > 0" class="content-container">
+    <div class="movies-grid">
+      <app-movie-card 
+        *ngFor="let movie of paginatedMovies" 
+        [movie]="movie"
+        (editMovie)="openEditDialog($event)"
+        (deleteMovie)="onDeleteMovie($event)"
+        class="movie-card-wrapper">
+      </app-movie-card>
     </div>
-    
-    <app-movie-card 
-      *ngFor="let movie of filteredMovies" 
-      [movie]="movie"
-      (editMovie)="openEditDialog($event)"
-      (deleteMovie)="onDeleteMovie($event)"
-      class="movie-card-wrapper">
-    </app-movie-card>
+
+    <!-- Paginator -->
+    <mat-paginator 
+      [length]="totalItems"
+      [pageSize]="pageSize"
+      [pageIndex]="pageIndex"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="onPageChange($event)"
+      showFirstLastButtons
+      class="paginator">
+    </mat-paginator>
   </div>
 </div>

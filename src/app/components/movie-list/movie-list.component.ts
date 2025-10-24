@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { MoviesService } from '../../services/movies.service';
 import { Movie } from '../../models/movie.model';
 import { MovieFormDialogComponent } from '../movie-form-dialog/movie-form-dialog.component';
@@ -11,12 +14,30 @@ import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.compone
   templateUrl: './movie-list.component.html',
   styleUrls: ['./movie-list.component.scss']
 })
-export class MovieListComponent implements OnInit {
+export class MovieListComponent implements OnInit, AfterViewInit {
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+  
   movies: Movie[] = [];
   filteredMovies: Movie[] = [];
+  paginatedMovies: Movie[] = [];
+  dataSource: MatTableDataSource<Movie> = new MatTableDataSource<Movie>([]);
+  
   loading: boolean = true;
   error: string = '';
   searchTerm: string = '';
+  
+  // Vista: 'grid' o 'table'
+  viewMode: 'grid' | 'table' = 'grid';
+  
+  // Paginación
+  pageSize: number = 12;
+  pageIndex: number = 0;
+  pageSizeOptions: number[] = [12, 24, 48, 100];
+  totalItems: number = 0;
+  
+  // Columnas de la tabla
+  displayedColumns: string[] = ['rank', 'title', 'year', 'rating', 'genre', 'director', 'actions'];
 
   constructor(
     private moviesService: MoviesService,
@@ -28,6 +49,15 @@ export class MovieListComponent implements OnInit {
     this.loadMovies();
   }
 
+  ngAfterViewInit(): void {
+    if (this.paginator) {
+      this.dataSource.paginator = this.paginator;
+    }
+    if (this.sort) {
+      this.dataSource.sort = this.sort;
+    }
+  }
+
   loadMovies(): void {
     this.loading = true;
     this.moviesService.getTop100Movies().subscribe({
@@ -36,6 +66,9 @@ export class MovieListComponent implements OnInit {
         console.log('Primera película:', data[0]);
         this.movies = data;
         this.filteredMovies = data;
+        this.totalItems = data.length;
+        this.dataSource.data = data;
+        this.updatePaginatedMovies();
         this.loading = false;
       },
       error: (error) => {
@@ -45,10 +78,36 @@ export class MovieListComponent implements OnInit {
       }
     });
   }
+  
+  toggleView(mode: 'grid' | 'table'): void {
+    this.viewMode = mode;
+    // Reiniciar a la primera página al cambiar de vista
+    this.pageIndex = 0;
+    this.updatePaginatedMovies();
+  }
+  
+  onPageChange(event: PageEvent): void {
+    this.pageSize = event.pageSize;
+    this.pageIndex = event.pageIndex;
+    this.updatePaginatedMovies();
+    
+    // Scroll hacia arriba al cambiar de página
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  
+  updatePaginatedMovies(): void {
+    const startIndex = this.pageIndex * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.paginatedMovies = this.filteredMovies.slice(startIndex, endIndex);
+    this.totalItems = this.filteredMovies.length;
+  }
 
   onSearch(): void {
     if (!this.searchTerm.trim()) {
       this.filteredMovies = this.movies;
+      this.dataSource.data = this.movies;
+      this.pageIndex = 0;
+      this.updatePaginatedMovies();
       return;
     }
 
@@ -58,11 +117,18 @@ export class MovieListComponent implements OnInit {
       movie.description.toLowerCase().includes(term) ||
       movie.genre.some(g => g.toLowerCase().includes(term))
     );
+    
+    this.dataSource.data = this.filteredMovies;
+    this.pageIndex = 0;
+    this.updatePaginatedMovies();
   }
 
   clearSearch(): void {
     this.searchTerm = '';
     this.filteredMovies = this.movies;
+    this.dataSource.data = this.movies;
+    this.pageIndex = 0;
+    this.updatePaginatedMovies();
   }
 
   openCreateDialog(): void {
@@ -105,6 +171,8 @@ export class MovieListComponent implements OnInit {
         // Agregar la película al array local (NO recargar desde servicio)
         this.movies.push(newMovie);
         this.filteredMovies = [...this.movies];
+        this.dataSource.data = this.filteredMovies;
+        this.updatePaginatedMovies();
         this.showSnackBar('¡Película creada exitosamente! 🎬', 'success');
       },
       error: (error) => {
@@ -122,6 +190,8 @@ export class MovieListComponent implements OnInit {
         if (index !== -1) {
           this.movies[index] = movie;
           this.filteredMovies = [...this.movies];
+          this.dataSource.data = this.filteredMovies;
+          this.updatePaginatedMovies();
           // Re-aplicar búsqueda si hay filtro activo
           if (this.searchTerm) {
             this.onSearch();
@@ -157,6 +227,8 @@ export class MovieListComponent implements OnInit {
               // Eliminar la película del array local (NO recargar desde servicio)
               this.movies = this.movies.filter(m => m.id !== movie.id);
               this.filteredMovies = [...this.movies];
+              this.dataSource.data = this.filteredMovies;
+              this.updatePaginatedMovies();
               // Re-aplicar búsqueda si hay filtro activo
               if (this.searchTerm) {
                 this.onSearch();
@@ -195,6 +267,9 @@ export class MovieListComponent implements OnInit {
           next: (data) => {
             this.movies = data;
             this.filteredMovies = data;
+            this.dataSource.data = data;
+            this.pageIndex = 0;
+            this.updatePaginatedMovies();
             this.loading = false;
             this.showSnackBar('¡Datos restaurados exitosamente! 🔄', 'success');
           },
@@ -233,6 +308,9 @@ export class MovieListComponent implements OnInit {
           next: (data) => {
             this.movies = data;
             this.filteredMovies = data;
+            this.dataSource.data = data;
+            this.pageIndex = 0;
+            this.updatePaginatedMovies();
             this.loading = false;
             this.showSnackBar('¡Datos recargados exitosamente desde la API! 🎬', 'success');
           },
@@ -247,8 +325,12 @@ export class MovieListComponent implements OnInit {
     });
   }
 
+  getGenresString(genres: string[]): string {
+    return genres.join(', ');
+  }
+
   private showSnackBar(message: string, type: 'success' | 'error'): void {
-    this.snackBar.open(message, 'Cerrar', {
+    this.snackBar.open(message, '✕', {
       duration: 3000,
       horizontalPosition: 'end',
       verticalPosition: 'top',

@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'Top 100 Películas IMDB';
+  title = 'Top 100 Películas - Challenge Angular';
 }

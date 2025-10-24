@@ -20,6 +20,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MovieFormDialogComponent } from './components/movie-form-dialog/movie-form-dialog.component';
 import { MovieSkeletonComponent } from './components/movie-skeleton/movie-skeleton.component';
@@ -51,7 +56,12 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
     MatFormFieldModule,
     MatDialogModule,
     MatSelectModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatTooltipModule,
+    MatButtonToggleModule
   ],
   providers: [],
   bootstrap: [AppComponent]
