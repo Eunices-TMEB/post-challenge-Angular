@@ -2,7 +2,6 @@
 
 <mat-dialog-content>
   <form [formGroup]="movieForm" class="movie-form">
-    <!-- Title -->
     <mat-form-field appearance="outline" 
                     [class.field-error]="movieForm.get('title')?.invalid && movieForm.get('title')?.touched"
                     [class.field-valid]="movieForm.get('title')?.valid && movieForm.get('title')?.touched">
@@ -17,7 +16,6 @@
       </mat-error>
     </mat-form-field>
 
-    <!-- Description -->
     <mat-form-field appearance="outline"
                     [class.field-error]="movieForm.get('description')?.invalid && movieForm.get('description')?.touched"
                     [class.field-valid]="movieForm.get('description')?.valid && movieForm.get('description')?.touched">
@@ -32,7 +30,6 @@
       </mat-error>
     </mat-form-field>
 
-    <!-- Year and Rating Row -->
     <div class="form-row">
       <mat-form-field appearance="outline"
                       [class.field-error]="movieForm.get('year')?.invalid && movieForm.get('year')?.touched"
@@ -63,7 +60,6 @@
       </mat-form-field>
     </div>
 
-    <!-- Genre -->
     <mat-form-field appearance="outline"
                     [class.field-error]="movieForm.get('genre')?.invalid && movieForm.get('genre')?.touched"
                     [class.field-valid]="movieForm.get('genre')?.valid && movieForm.get('genre')?.touched">
@@ -82,7 +78,6 @@
       </mat-error>
     </mat-form-field>
 
-    <!-- Image URL -->
     <mat-form-field appearance="outline"
                     [class.field-error]="movieForm.get('image')?.invalid && movieForm.get('image')?.touched"
                     [class.field-valid]="movieForm.get('image')?.valid && movieForm.get('image')?.touched">
@@ -97,7 +92,6 @@
       </mat-error>
     </mat-form-field>
 
-    <!-- Large Image URL (Optional) -->
     <mat-form-field appearance="outline"
                     [class.field-error]="movieForm.get('big_image')?.invalid && movieForm.get('big_image')?.touched"
                     [class.field-valid]="movieForm.get('big_image')?.valid && movieForm.get('big_image')?.touched && movieForm.get('big_image')?.value">
@@ -112,7 +106,6 @@
       </mat-error>
     </mat-form-field>
 
-    <!-- Director (Optional) -->
     <mat-form-field appearance="outline">
       <mat-label>Director (Opcional)</mat-label>
       <input matInput formControlName="director" placeholder="Christopher Nolan, Steven Spielberg">
@@ -120,7 +113,6 @@
       <mat-hint>Separa múltiples directores con comas</mat-hint>
     </mat-form-field>
 
-    <!-- Writers (Optional) -->
     <mat-form-field appearance="outline">
       <mat-label>Escritores (Opcional)</mat-label>
       <input matInput formControlName="writers" placeholder="Nombres de escritores separados por comas">
@@ -128,7 +120,6 @@
       <mat-hint>Separa múltiples escritores con comas</mat-hint>
     </mat-form-field>
 
-    <!-- IMDB Link (Optional) -->
     <mat-form-field appearance="outline"
                     [class.field-error]="movieForm.get('imdb_link')?.invalid && movieForm.get('imdb_link')?.touched"
                     [class.field-valid]="movieForm.get('imdb_link')?.valid && movieForm.get('imdb_link')?.touched && movieForm.get('imdb_link')?.value">
@@ -143,7 +134,6 @@
       </mat-error>
     </mat-form-field>
     
-    <!-- Resumen de Validación -->
     <div class="validation-summary" *ngIf="movieForm.touched && !movieForm.valid">
       <div class="validation-alert">
         <mat-icon class="alert-icon">report_problem</mat-icon>

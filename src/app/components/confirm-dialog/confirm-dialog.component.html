@@ -2,7 +2,6 @@
                          [class.dialog-danger]="data.type === 'danger'"
                          [class.dialog-info]="data.type === 'info'">
   
-  <!-- Header -->
   <div class="dialog-header">
     <mat-icon class="dialog-icon">
       {{ data.type === 'danger' ? 'delete_forever' : data.type === 'warning' ? 'warning' : 'info' }}
@@ -10,12 +9,10 @@
     <h2 mat-dialog-title>{{ data.title }}</h2>
   </div>
 
-  <!-- Content -->
   <mat-dialog-content>
     <p class="dialog-message">{{ data.message }}</p>
   </mat-dialog-content>
 
-  <!-- Actions -->
   <mat-dialog-actions align="end">
     <button mat-raised-button 
             (click)="onCancel()" 

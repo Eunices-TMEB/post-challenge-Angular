@@ -18,8 +18,6 @@ export class MovieDetailComponent implements OnInit {
   loading: boolean = true;
   error: string = '';
   contentType: 'movie' | 'series' = 'movie';
-  
-  // Imagen placeholder cuando falla la carga
   private readonly placeholderImage = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjYwMCIgZmlsbD0iIzJhMmEyYSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiM2NjY2NjYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj7imIXvuI8gSW1hZ2VuIG5vIGRpc3BvbmlibGU8L3RleHQ+PC9zdmc+';
 
   constructor(
@@ -35,8 +33,6 @@ export class MovieDetailComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       const type = params.get('type') as 'movie' | 'series' | null;
-      
-      // Guardar el tipo de contenido para uso en el template
       this.contentType = type || 'movie';
       
       if (id) {
@@ -61,11 +57,10 @@ export class MovieDetailComponent implements OnInit {
           this.loading = false;
         }
       },
-      error: (error) => {
+      error: () => {
         const contentType = type === 'movie' ? 'película' : 'serie';
         this.error = `Error al cargar la ${contentType}. Por favor, intenta de nuevo más tarde.`;
         this.loading = false;
-        console.error('Error loading content:', error);
       }
     });
   }
@@ -98,15 +93,13 @@ export class MovieDetailComponent implements OnInit {
     const tipoLower = tipo.toLowerCase();
     const dataType = this.contentType === 'movie' ? 'movies' : 'series';
     
-    // Pasar el tipo al servicio para actualizar el localStorage correcto
     this.moviesService.updateMovie(movie, dataType).subscribe({
       next: () => {
         this.movie = movie;
         this.showSnackBar(`¡${tipo} actualizada exitosamente! ✏️`, 'success');
       },
-      error: (error) => {
+      error: () => {
         this.showSnackBar(`Error al actualizar la ${tipoLower}. Por favor, intenta de nuevo.`, 'error');
-        console.error('Error updating:', error);
       }
     });
   }
@@ -132,7 +125,6 @@ export class MovieDetailComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result && this.movie) {
-        // Pasar el tipo al servicio para actualizar el localStorage correcto
         this.moviesService.deleteMovie(this.movie.id, dataType).subscribe({
           next: (success) => {
             if (success) {
@@ -142,9 +134,8 @@ export class MovieDetailComponent implements OnInit {
               this.showSnackBar(`Error al eliminar la ${tipoLower}. Por favor, intenta de nuevo.`, 'error');
             }
           },
-          error: (error) => {
+          error: () => {
             this.showSnackBar(`Error al eliminar la ${tipoLower}. Por favor, intenta de nuevo.`, 'error');
-            console.error('Error deleting:', error);
           }
         });
       }
@@ -159,10 +150,6 @@ export class MovieDetailComponent implements OnInit {
 
   onImageError(event: Event): void {
     const imgElement = event.target as HTMLImageElement;
-    if (this.movie) {
-      console.warn(`Imagen no disponible para: ${this.movie.title}`);
-      console.warn(`URL intentada: ${this.movie.big_image || this.movie.image}`);
-    }
     imgElement.src = this.placeholderImage;
   }
 

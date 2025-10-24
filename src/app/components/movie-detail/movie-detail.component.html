@@ -1,20 +1,16 @@
 <div class="movie-detail-container">
-  <!-- Loading State -->
   <div *ngIf="loading" class="loading-container">
     <mat-spinner></mat-spinner>
     <p>Cargando {{ contentType === 'movie' ? 'película' : 'serie' }}...</p>
   </div>
 
-  <!-- Error State -->
   <div *ngIf="error && !loading" class="error-container">
     <mat-icon color="warn">error</mat-icon>
     <p>{{ error }}</p>
     <button mat-raised-button color="primary" (click)="goBack()">Volver</button>
   </div>
 
-  <!-- Movie Detail -->
   <div *ngIf="movie && !loading && !error" class="detail-content">
-    <!-- Header con botón de volver -->
     <div class="detail-header">
       <button mat-icon-button (click)="goBack()" class="back-button" matTooltip="Volver">
         <mat-icon>arrow_back</mat-icon>
@@ -22,9 +18,7 @@
       <h1 class="page-title">Detalle de {{ contentType === 'movie' ? 'Película' : 'Serie' }}</h1>
     </div>
 
-    <!-- Contenido Principal -->
     <div class="movie-detail-card">
-      <!-- Imagen y información básica -->
       <div class="detail-main">
         <div class="image-section">
           <img [src]="movie.big_image || movie.image" 
@@ -71,7 +65,6 @@
             <p class="description">{{ movie.description }}</p>
           </div>
 
-          <!-- Información adicional -->
           <div class="additional-info">
             <div *ngIf="movie.director && movie.director.length > 0" class="info-group">
               <h3>
@@ -107,7 +100,6 @@
             </div>
           </div>
 
-          <!-- Botones de acción -->
           <div class="action-buttons">
             <button mat-raised-button color="primary" (click)="openEditDialog()">
               <mat-icon>edit</mat-icon>

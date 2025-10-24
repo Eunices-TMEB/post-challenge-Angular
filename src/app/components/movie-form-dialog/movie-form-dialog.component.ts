@@ -86,7 +86,6 @@ export class MovieFormDialogComponent implements OnInit {
 
       this.dialogRef.close(movie);
     } else {
-      // Mark all fields as touched to show validation errors
       Object.keys(this.movieForm.controls).forEach(key => {
         this.movieForm.get(key)?.markAsTouched();
       });

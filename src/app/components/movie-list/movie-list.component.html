@@ -1,5 +1,4 @@
 <div class="movie-list-container">
-  <!-- Header -->
   <mat-toolbar color="primary" 
                class="toolbar" 
                id="main-toolbar"
@@ -33,13 +32,11 @@
     </button>
   </mat-toolbar>
 
-  <!-- Search Bar con Tabs integrados -->
   <div class="search-tabs-container" 
        id="search-container"
        role="search"
        aria-label="Búsqueda de películas">
     
-    <!-- Botón Películas a la izquierda -->
     <button mat-raised-button 
             [class.active]="currentTab === 'movies'"
             (click)="onTabChange('movies')"
@@ -48,9 +45,8 @@
       Películas
     </button>
 
-    <!-- Buscador en el centro -->
     <mat-form-field appearance="outline" class="search-field">
-      <mat-label>Buscar películas...</mat-label>
+      <mat-label>Buscar...</mat-label>
       <input matInput 
              id="movie-search-input"
              [(ngModel)]="searchTerm" 
@@ -69,7 +65,19 @@
       </button>
     </mat-form-field>
 
-    <!-- Botón Series a la derecha -->
+    <mat-form-field appearance="outline" class="genre-filter">
+      <mat-label>Género</mat-label>
+      <mat-select [(ngModel)]="selectedGenre" 
+                  (selectionChange)="onGenreChange()"
+                  id="genre-filter-select">
+        <mat-option value="all">Todos los géneros</mat-option>
+        <mat-option *ngFor="let genre of availableGenres" [value]="genre">
+          {{ genre }}
+        </mat-option>
+      </mat-select>
+      <mat-icon matPrefix>category</mat-icon>
+    </mat-form-field>
+
     <button mat-raised-button 
             [class.active]="currentTab === 'series'"
             (click)="onTabChange('series')"
@@ -81,14 +89,12 @@
     <span id="search-help" class="sr-only">Busca por título, descripción o género de película</span>
   </div>
 
-  <!-- Results Summary & Filters Info -->
   <div *ngIf="!loading && !error" 
        class="results-summary" 
        id="results-summary"
        role="status"
        aria-live="polite">
     <div class="summary-content">
-      <!-- Total Results -->
       <div class="total-results">
         <mat-icon class="summary-icon">{{ currentTab === 'movies' ? 'movie_filter' : 'tv' }}</mat-icon>
         <span class="results-text">
@@ -100,7 +106,6 @@
         </span>
       </div>
 
-      <!-- Current Page Info -->
       <div class="page-info" *ngIf="filteredMovies.length > 0">
         <mat-icon class="summary-icon">visibility</mat-icon>
         <span class="results-text">
@@ -109,7 +114,6 @@
         </span>
       </div>
 
-      <!-- Active Search Filter -->
       <div class="active-filters" *ngIf="searchTerm">
         <mat-chip class="filter-chip">
           <mat-icon class="chip-icon">search</mat-icon>
@@ -122,26 +126,22 @@
     </div>
   </div>
 
-  <!-- Loading Skeletons -->
   <div *ngIf="loading" class="movies-grid">
     <app-movie-skeleton *ngFor="let item of [1,2,3,4,5,6,7,8,9,10,11,12]"></app-movie-skeleton>
   </div>
 
-  <!-- Error Message -->
   <div *ngIf="error && !loading" class="error-container">
     <mat-icon color="warn">error</mat-icon>
     <p>{{ error }}</p>
     <button mat-raised-button color="primary" (click)="loadMovies()">Reintentar</button>
   </div>
 
-  <!-- No Results -->
   <div *ngIf="!loading && !error && filteredMovies.length === 0" class="no-results">
     <mat-icon>search_off</mat-icon>
     <p>No se encontraron {{ currentTab === 'movies' ? 'películas' : 'series' }} que coincidan con "{{ searchTerm }}"</p>
     <button mat-raised-button color="primary" (click)="clearSearch()">Limpiar Búsqueda</button>
   </div>
 
-  <!-- Movies Grid with Pagination -->
   <div *ngIf="!loading && !error && filteredMovies.length > 0" 
        class="content-container" 
        id="movies-content-container"
@@ -165,7 +165,6 @@
       </app-movie-card>
     </div>
 
-    <!-- Paginator -->
     <mat-paginator 
       id="movies-paginator"
       [length]="totalItems"

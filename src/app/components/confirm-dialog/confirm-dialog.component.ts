@@ -19,7 +19,6 @@ export class ConfirmDialogComponent {
     public dialogRef: MatDialogRef<ConfirmDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogData
   ) {
-    // Valores por defecto
     this.data.confirmText = this.data.confirmText || 'Aceptar';
     this.data.cancelText = this.data.cancelText || 'Cancelar';
     this.data.type = this.data.type || 'warning';

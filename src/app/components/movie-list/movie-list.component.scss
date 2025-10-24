@@ -1,6 +1,3 @@
-// ===================================
-// ACCESIBILIDAD - Screen Reader Only
-// ===================================
 .sr-only {
   position: absolute;
   width: 1px;
@@ -51,7 +48,6 @@
     flex: 1;
   }
   
-  // Estilos base para todos los botones
   .reset-button,
   .clear-button,
   .add-button {
@@ -72,7 +68,6 @@
       height: 20px;
     }
     
-    // Efecto de brillo animado
     &::before {
       content: '';
       position: absolute;
@@ -89,7 +84,6 @@
     }
   }
   
-  // Botón RESTAURAR DATOS - Naranja
   .reset-button {
     background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
     color: white !important;
@@ -122,7 +116,6 @@
     }
   }
   
-  // Botón LIMPIAR CACHÉ - Rojo
   .clear-button {
     background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
     color: white !important;
@@ -155,7 +148,6 @@
     }
   }
   
-  // Botón AGREGAR PELÍCULA - Verde
   .add-button {
     background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
     color: white !important;
@@ -189,7 +181,6 @@
     }
   }
   
-  // Animaciones
   @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
@@ -206,7 +197,6 @@
     50% { transform: scale(1.2); }
   }
   
-  // Tablet breakpoint
   @media (max-width: 1024px) {
     height: auto;
     padding: 14px;
@@ -230,7 +220,6 @@
     }
   }
   
-  // Mobile breakpoint
   @media (max-width: 768px) {
     height: auto;
     padding: 16px;
@@ -272,7 +261,6 @@
     }
   }
   
-  // Small mobile breakpoint
   @media (max-width: 480px) {
     padding: 12px;
     gap: 8px;
@@ -291,7 +279,7 @@
       letter-spacing: 0.3px;
       
       span {
-        display: none; // Hide text on very small screens
+        display: none;
       }
       
       mat-icon {
@@ -369,27 +357,23 @@
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 30px;
   
-  // Large tablets
   @media (max-width: 1200px) {
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 25px;
   }
   
-  // Tablets
   @media (max-width: 1024px) {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 20px;
     padding: 0 16px;
   }
   
-  // Mobile devices
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
     gap: 20px;
     padding: 0 16px;
   }
   
-  // Small mobile devices
   @media (max-width: 480px) {
     gap: 16px;
     padding: 0 12px;
@@ -439,22 +423,27 @@
   }
 }
 
-// ===================================
-// SEARCH & TABS CONTAINER - Diseño Integrado
-// ===================================
 .search-tabs-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 12px;
   max-width: 1200px;
   margin: 30px auto 20px;
   padding: 0 20px;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 50px;
-  padding: 8px 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+  @media (max-width: 1024px) {
+    gap: 10px;
+    padding: 8px 10px;
+  }
+
   @media (max-width: 768px) {
     padding: 12px 16px;
     margin: 20px auto 30px;
@@ -462,31 +451,36 @@
     gap: 12px;
     border-radius: 20px;
   }
-
+  
   @media (max-width: 480px) {
     gap: 10px;
   }
   
-  // Botones de tabs (Películas y Series)
   .tab-button {
     background: rgba(255, 255, 255, 0.05) !important;
     color: rgba(255, 255, 255, 0.7) !important;
     font-weight: 600 !important;
-    font-size: 14px !important;
-    padding: 8px 20px !important;
+    font-size: 13px !important;
+    padding: 8px 16px !important;
     border-radius: 30px !important;
     transition: all 0.3s ease !important;
     border: 2px solid transparent !important;
     display: flex !important;
     align-items: center !important;
-    gap: 8px !important;
+    gap: 6px !important;
     white-space: nowrap;
     flex-shrink: 0;
-    
+    min-width: auto !important;
+
     mat-icon {
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+    
+    @media (max-width: 1024px) {
+      padding: 8px 14px !important;
+      font-size: 12px !important;
     }
     
     &:hover {
@@ -530,7 +524,6 @@
     font-size: 14px;
     
     ::ng-deep {
-      // Form field para centrado vertical
       .mat-mdc-form-field {
         line-height: normal;
       }
@@ -539,7 +532,6 @@
         align-items: center;
       }
 
-      // Input wrapper con glassmorphism
       .mat-mdc-text-field-wrapper {
         background: linear-gradient(135deg, 
           rgba(255, 255, 255, 0.15) 0%, 
@@ -561,7 +553,6 @@
         position: relative;
         overflow: hidden;
         
-        // Reflejo de cristal
         &::before {
           content: '';
           position: absolute;
@@ -590,12 +581,10 @@
         }
       }
       
-      // Ocultar outline
       .mdc-notched-outline {
         display: none !important;
       }
 
-      // Contenedor del input (infix)
       .mat-mdc-form-field-infix {
         display: flex;
         align-items: center;
@@ -603,12 +592,10 @@
         min-height: 44px;
       }
 
-      // Subscript wrapper (para quitar espacio extra)
       .mat-mdc-form-field-subscript-wrapper {
         display: none;
       }
       
-      // Label (placeholder)
       .mat-mdc-form-field-label {
         color: rgba(255, 255, 255, 0.7) !important;
         font-weight: 500;
@@ -616,7 +603,6 @@
         letter-spacing: 0.3px;
       }
       
-      // Input text
       .mat-mdc-input-element {
         color: rgba(255, 255, 255, 0.95) !important;
         font-weight: 500;
@@ -632,7 +618,6 @@
         }
       }
       
-      // Icono de búsqueda (prefix)
       .mat-mdc-form-field-icon-prefix {
         display: flex;
         align-items: center;
@@ -649,7 +634,6 @@
         }
       }
       
-      // Botón de limpiar (suffix)
       .mat-mdc-form-field-icon-suffix {
         display: flex;
         align-items: center;
@@ -680,7 +664,6 @@
         }
       }
       
-      // Focus state
       .mat-mdc-text-field-wrapper.mdc-text-field--focused {
         background: linear-gradient(135deg, 
           rgba(255, 255, 255, 0.25) 0%, 
@@ -699,7 +682,158 @@
         }
       }
       
-      // Eliminar línea inferior
+      .mdc-line-ripple {
+        display: none !important;
+      }
+    }
+  }
+  
+  .genre-filter {
+    min-width: 160px;
+    width: 160px;
+    font-size: 14px;
+    flex-shrink: 0;
+    
+    @media (max-width: 1024px) {
+      min-width: 140px;
+      width: 140px;
+    }
+    
+    @media (max-width: 768px) {
+      width: 100%;
+      min-width: 100%;
+    }
+    
+    ::ng-deep {
+      .mat-mdc-form-field {
+        line-height: normal;
+      }
+
+      .mat-mdc-form-field-flex {
+        align-items: center;
+      }
+
+      .mat-mdc-text-field-wrapper {
+        background: linear-gradient(135deg, 
+          rgba(255, 255, 255, 0.15) 0%, 
+          rgba(255, 255, 255, 0.08) 100%);
+        backdrop-filter: blur(25px) saturate(200%) brightness(1.1);
+        -webkit-backdrop-filter: blur(25px) saturate(200%) brightness(1.1);
+        border-radius: 30px;
+        padding: 0 18px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        box-shadow: 
+          0 8px 32px rgba(0, 0, 0, 0.2),
+          0 4px 16px rgba(0, 0, 0, 0.15),
+          inset 0 1px 0 rgba(255, 255, 255, 0.3),
+          inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 2px solid rgba(255, 255, 255, 0.25);
+        position: relative;
+        overflow: hidden;
+        
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 50%;
+          background: linear-gradient(180deg, 
+            rgba(255, 255, 255, 0.15) 0%, 
+            transparent 100%);
+          pointer-events: none;
+          border-radius: 30px 30px 0 0;
+        }
+        
+        &:hover {
+          background: linear-gradient(135deg, 
+            rgba(255, 255, 255, 0.2) 0%, 
+            rgba(255, 255, 255, 0.12) 100%);
+          border-color: rgba(255, 255, 255, 0.35);
+          box-shadow: 
+            0 12px 48px rgba(0, 0, 0, 0.25),
+            0 6px 24px rgba(0, 0, 0, 0.2),
+            inset 0 1px 0 rgba(255, 255, 255, 0.4),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+          transform: translateY(-2px);
+        }
+      }
+      
+      .mdc-notched-outline {
+        display: none !important;
+      }
+
+      .mat-mdc-form-field-infix {
+        display: flex;
+        align-items: center;
+        padding: 0 !important;
+        min-height: 44px;
+      }
+
+      .mat-mdc-form-field-subscript-wrapper {
+        display: none;
+      }
+      
+      .mat-mdc-form-field-label {
+        color: rgba(255, 255, 255, 0.7) !important;
+        font-weight: 500;
+        font-size: 12px;
+        letter-spacing: 0.3px;
+      }
+      
+      .mat-mdc-select-trigger {
+        height: 44px;
+        display: flex;
+        align-items: center;
+      }
+      
+      .mat-mdc-select-value {
+        color: rgba(255, 255, 255, 0.95) !important;
+        font-weight: 500;
+        font-size: 13px;
+      }
+      
+      .mat-mdc-select-arrow {
+        color: rgba(255, 255, 255, 0.8);
+      }
+      
+      .mat-mdc-form-field-icon-prefix {
+        display: flex;
+        align-items: center;
+        height: 44px;
+        
+        mat-icon {
+          color: rgba(255, 255, 255, 0.8);
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+          margin-right: 8px;
+          filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+          transition: all 0.3s ease;
+        }
+      }
+      
+      .mat-mdc-text-field-wrapper.mdc-text-field--focused {
+        background: linear-gradient(135deg, 
+          rgba(255, 255, 255, 0.25) 0%, 
+          rgba(255, 255, 255, 0.15) 100%);
+        border-color: rgba(96, 165, 250, 0.6);
+        box-shadow: 
+          0 12px 48px rgba(59, 130, 246, 0.3),
+          0 6px 24px rgba(0, 0, 0, 0.2),
+          inset 0 1px 0 rgba(255, 255, 255, 0.5),
+          inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+        transform: translateY(-2px);
+        
+        .mat-mdc-form-field-icon-prefix mat-icon {
+          color: rgba(191, 219, 254, 1);
+          transform: scale(1.1);
+        }
+      }
+      
       .mdc-line-ripple {
         display: none !important;
       }
@@ -707,9 +841,6 @@
   }
 }
 
-// ===================================
-// RESULTS SUMMARY - Información de Estado
-// ===================================
 .results-summary {
   max-width: 1400px;
   margin: 0 auto 30px;
@@ -851,9 +982,6 @@
   }
 }
 
-// ===================================
-// CONTENT CONTAINER (Grid View)
-// ===================================
 .content-container {
   max-width: 1400px;
   margin: 0 auto;
@@ -864,9 +992,6 @@
   }
 }
 
-// ===================================
-// PAGINATOR - Más Oscuro
-// ===================================
 .paginator {
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(20px) saturate(180%);

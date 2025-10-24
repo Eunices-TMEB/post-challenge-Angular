@@ -5,7 +5,6 @@ import { Injectable } from '@angular/core';
 })
 export class TranslationService {
   
-  // Diccionario de géneros en español
   private genreTranslations: { [key: string]: string } = {
     'Action': 'Acción',
     'Adventure': 'Aventura',
@@ -31,7 +30,6 @@ export class TranslationService {
     'Western': 'Western'
   };
 
-  // Diccionario de títulos de películas famosas (Top 100 IMDB)
   private movieTitleTranslations: { [key: string]: string } = {
     'The Shawshank Redemption': 'Sueño de fuga',
     'The Godfather': 'El Padrino',
@@ -134,37 +132,22 @@ export class TranslationService {
 
   constructor() { }
 
-  /**
-   * Traduce un género al español
-   */
   translateGenre(genre: string): string {
     return this.genreTranslations[genre] || genre;
   }
 
-  /**
-   * Traduce un array de géneros al español
-   */
   translateGenres(genres: string[]): string[] {
     return genres.map(genre => this.translateGenre(genre));
   }
 
-  /**
-   * Traduce el título de una película si existe en el diccionario
-   */
   translateTitle(title: string): string {
     return this.movieTitleTranslations[title] || title;
   }
 
-  /**
-   * Obtiene todos los géneros disponibles en español
-   */
   getAvailableGenresInSpanish(): string[] {
     return Object.values(this.genreTranslations).sort();
   }
 
-  /**
-   * Obtiene el género en inglés a partir del español
-   */
   getGenreInEnglish(spanishGenre: string): string {
     const entry = Object.entries(this.genreTranslations)
       .find(([_, spanish]) => spanish === spanishGenre);

@@ -6,7 +6,6 @@ import { MovieDetailComponent } from './components/movie-detail/movie-detail.com
 const routes: Routes = [
   { path: '', component: MovieListComponent },
   { path: 'ejercicio/:type/:id', component: MovieDetailComponent },
-  // Ruta legacy para compatibilidad (asume que es película)
   { path: 'ejercicio/:id', component: MovieDetailComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];

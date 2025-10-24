@@ -2,83 +2,68 @@
   display: block;
 }
 
-// ========================================
-// 🚨 VALIDACIÓN VISUAL LLAMATIVA
-// ========================================
-
-// Animación de shake para errores
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
   10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
   20%, 40%, 60%, 80% { transform: translateX(5px); }
 }
 
-// Animación de pulse para iconos de error
 @keyframes pulse-error {
   0% { transform: scale(1); }
   50% { transform: scale(1.1); }
   100% { transform: scale(1); }
 }
 
-// Campo con ERROR (Danger - Rojo)
 .field-error {
   animation: shake 0.5s ease-in-out;
-  margin-bottom: 12px; // Reducido de 16px a 12px
+  margin-bottom: 12px; 
   
   ::ng-deep {
-    // Fondo rojo suave sin borde extra
     .mat-mdc-text-field-wrapper {
       background: rgba(239, 68, 68, 0.04) !important;
-      border: none !important; // Sin borde en el wrapper
-      box-shadow: none !important; // Sin sombra extra
+      border: none !important; 
+      box-shadow: none !important; 
     }
     
-    // Eliminar completamente el outline (la línea)
     .mdc-notched-outline {
-      display: none !important; // Ocultar completamente el outline
+      display: none !important; 
     }
     
-    // Agregar un borde simple al campo completo
     .mat-mdc-text-field-wrapper {
       border: 2px solid #ef4444 !important;
       border-radius: 4px !important;
     }
     
-    // Label rojo
     label {
       color: #dc2626 !important;
       font-weight: 600 !important;
     }
     
-    // Input rojo
     input, textarea {
       color: #991b1b !important;
       caret-color: #ef4444 !important;
     }
     
-    // Iconos prefix en rojo
     .mat-mdc-form-field-icon-prefix {
       color: #ef4444 !important;
     }
   }
 }
 
-// Campo VÁLIDO (Success - Verde)
 .field-valid {
-  margin-bottom: 6px; // Reducido de 8px a 6px
+  margin-bottom: 6px; 
   
   ::ng-deep {
     .mat-mdc-text-field-wrapper {
       background: rgba(34, 197, 94, 0.02) !important;
-      box-shadow: none !important; // Sin sombra extra
+        box-shadow: none !important; 
     }
     
-    // Eliminar completamente el outline (la línea)
+    
     .mdc-notched-outline {
-      display: none !important; // Ocultar completamente el outline
+      display: none !important; 
     }
     
-    // Agregar un borde simple al campo completo
     .mat-mdc-text-field-wrapper {
       border: 2px solid #22c55e !important;
       border-radius: 4px !important;
@@ -95,7 +80,6 @@
   }
 }
 
-// Icono de ERROR (rojo pulsante)
 .error-icon {
   color: #ef4444 !important;
   font-size: 24px !important;
@@ -104,7 +88,6 @@
   animation: pulse-error 1.5s ease-in-out infinite;
 }
 
-// Icono de SUCCESS (verde)
 .success-icon {
   color: #22c55e !important;
   font-size: 24px !important;
@@ -112,53 +95,48 @@
   height: 24px !important;
 }
 
-// Icono inline en mensajes de error (más pequeño)
 .error-icon-inline {
-  font-size: 14px !important; // Reducido de 18px a 14px
+  font-size: 14px !important; 
   width: 14px !important;
   height: 14px !important;
-  margin-right: 4px !important; // Reducido de 6px a 4px
+  margin-right: 4px !important; 
   vertical-align: middle !important;
   color: #ef4444 !important;
-  flex-shrink: 0; // No permitir que se achique
+  flex-shrink: 0; 
 }
 
-// Mensajes de error más llamativos y compactos
 ::ng-deep {
   .mat-mdc-form-field-error {
     color: #dc2626 !important;
-    font-weight: 500 !important; // Reducido de 600 a 500
-    font-size: 11px !important; // Reducido de 12px a 11px
-    line-height: 1.3 !important; // Mejor control de altura
-    background: rgba(239, 68, 68, 0.08); // Fondo más suave
-    padding: 4px 8px; // Más compacto
-    border-radius: 4px; // Bordes más suaves
-    margin-top: 2px; // Menos espacio arriba
-    margin-bottom: 4px; // Menos espacio abajo
-    border: none; // Sin borde (eliminada la línea delgada)
+    font-weight: 500 !important; 
+    font-size: 11px !important; 
+    line-height: 1.3 !important; 
+    background: rgba(239, 68, 68, 0.08); 
+    padding: 4px 8px; 
+    border-radius: 4px; 
+    margin-top: 2px; 
+    margin-bottom: 4px; 
+    border: none; 
     display: flex !important;
     align-items: center;
-    box-shadow: none; // Sin sombra para look más limpio
+    box-shadow: none; 
     position: relative;
     z-index: 1;
-    max-width: 100%; // No exceder ancho del contenedor
-    word-wrap: break-word; // Romper palabras largas
-    overflow-wrap: break-word; // Compatibilidad
+      max-width: 100%; 
+    word-wrap: break-word; 
+    overflow-wrap: break-word; 
   }
   
-  // Ajustar el subscript wrapper para que no se solape
   .mat-mdc-form-field-subscript-wrapper {
-    margin-bottom: 4px; // Reducido
-    min-height: 20px; // Altura mínima
+    margin-bottom: 4px; 
+    min-height: 20px; 
   }
   
-  // Asegurar que el mat-form-field tenga altura suficiente
   .mat-mdc-form-field {
-    min-height: auto; // Permitir expansión
+    min-height: auto; 
   }
 }
 
-// Resumen de validación (Alert de error)
 .validation-summary {
   margin-top: 24px;
   animation: slideDown 0.3s ease-out;
@@ -178,16 +156,16 @@
 .validation-alert {
   background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(220, 38, 38, 0.08) 100%);
   border: 2px solid #ef4444;
-  border-radius: 8px; // Más compacto
-  padding: 12px; // Reducido de 16px
+  border-radius: 8px; 
+  padding: 12px; 
   display: flex;
   align-items: flex-start;
-  gap: 10px; // Reducido de 12px
-  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.15); // Más sutil
+  gap: 10px; 
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.15); 
   
   .alert-icon {
     color: #ef4444;
-    font-size: 24px; // Reducido de 32px
+    font-size: 24px; 
     width: 24px;
     height: 24px;
     animation: pulse-error 2s ease-in-out infinite;
@@ -200,14 +178,14 @@
     strong {
       display: block;
       color: #991b1b;
-      font-size: 13px; // Reducido de 16px
-      font-weight: 600; // Reducido de 700
-      margin-bottom: 2px; // Reducido de 4px
+      font-size: 13px; 
+      font-weight: 600; 
+      margin-bottom: 2px; 
     }
     
     p {
       color: #dc2626;
-      font-size: 11px; // Reducido de 14px
+      font-size: 11px; 
       margin: 0;
       font-weight: 500;
       line-height: 1.3;
@@ -216,12 +194,19 @@
 }
 
 h2[mat-dialog-title] {
-  color: #f5f5f5;
+  color: #ffffff;
   font-weight: 700;
   margin: 0;
   padding: 20px 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(0, 0, 0, 0.4);
+  border-bottom: 2px solid rgba(245, 197, 24, 0.3);
+  background: linear-gradient(135deg, 
+    rgba(245, 197, 24, 0.15) 0%, 
+    rgba(212, 160, 23, 0.1) 50%,
+    rgba(0, 0, 0, 0.2) 100%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
   
   @media (max-width: 768px) {
     padding: 16px 20px;
@@ -235,31 +220,28 @@ h2[mat-dialog-title] {
 }
 
 mat-dialog-content {
-  padding: 24px;
-  max-height: 70vh;
-  overflow-y: auto;
-  overflow-x: hidden; // Evitar scroll horizontal
+  padding: 48px 24px 24px 24px !important; 
+  max-height: none; 
+  overflow: visible; 
   background: #1f1f1f;
   color: #f5f5f5;
   
   @media (max-width: 768px) {
-    padding: 20px;
-    max-height: 65vh;
+    padding: 40px 20px 20px 20px !important;
   }
   
   @media (max-width: 480px) {
-    padding: 16px;
-    max-height: 60vh;
+    padding: 32px 16px 16px 16px !important;
   }
   
   .movie-form {
     display: flex;
     flex-direction: column;
-    gap: 20px; // Reducido de 24px a 20px (más compacto)
+    gap: 20px; 
     
     mat-form-field {
       width: 100%;
-      margin-bottom: 6px; // Reducido de 8px a 6px
+      margin-bottom: 6px; 
       
       ::ng-deep {
         .mat-mdc-text-field-wrapper {
@@ -306,11 +288,11 @@ mat-dialog-content {
     .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px; // Reducido de 20px a 16px
-      margin-bottom: 6px; // Reducido de 8px a 6px
+      gap: 16px; 
+      margin-bottom: 6px; 
       
       mat-form-field {
-        margin-bottom: 0; // Resetear en form-row
+        margin-bottom: 0; 
       }
       
       @media (max-width: 600px) {
@@ -328,9 +310,16 @@ mat-dialog-content {
 
 mat-dialog-actions {
   padding: 16px 24px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 2px solid rgba(245, 197, 24, 0.3);
   margin: 0;
-  background: rgba(0, 0, 0, 0.4);
+  background: linear-gradient(135deg, 
+    rgba(0, 0, 0, 0.2) 0%,
+    rgba(212, 160, 23, 0.1) 50%, 
+    rgba(245, 197, 24, 0.15) 100%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3),
+              inset 0 -1px 0 rgba(255, 255, 255, 0.1);
   
   @media (max-width: 768px) {
     padding: 14px 20px;
@@ -408,22 +397,5 @@ mat-dialog-actions {
   }
 }
 
-/* Custom scrollbar for dialog content */
-mat-dialog-content::-webkit-scrollbar {
-  width: 8px;
-}
 
-mat-dialog-content::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.3);
-}
-
-mat-dialog-content::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, rgba(245, 197, 24, 0.3) 0%, rgba(245, 197, 24, 0.5) 100%);
-  border-radius: 4px;
-  backdrop-filter: blur(5px);
-}
-
-mat-dialog-content::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, rgba(245, 197, 24, 0.5) 0%, rgba(245, 197, 24, 0.7) 100%);
-}
 
