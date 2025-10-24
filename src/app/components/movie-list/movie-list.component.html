@@ -1,33 +1,125 @@
 <div class="movie-list-container">
   <!-- Header -->
-  <mat-toolbar color="primary" class="toolbar">
-    <mat-icon class="toolbar-icon">movie</mat-icon>
-    <span class="toolbar-title">Top 100 Películas - Challenge Angular</span>
+  <mat-toolbar color="primary" 
+               class="toolbar" 
+               id="main-toolbar"
+               role="banner">
+    <mat-icon class="toolbar-icon">{{ currentTab === 'movies' ? 'movie' : 'tv' }}</mat-icon>
+    <span class="toolbar-title">Top 100 {{ currentTab === 'movies' ? 'Películas' : 'Series' }} - Challenge Angular</span>
     <span class="spacer"></span>
-    <button mat-raised-button class="reset-button" (click)="resetToOriginal()">
+    <button mat-raised-button 
+            class="reset-button" 
+            id="reset-data-button"
+            (click)="resetToOriginal()"
+            aria-label="Restaurar datos originales de las películas">
       <mat-icon>refresh</mat-icon>
       Restaurar Datos
     </button>
-    <button mat-raised-button class="clear-button" (click)="clearAndReload()">
+    <button mat-raised-button 
+            class="clear-button" 
+            id="clear-cache-button"
+            (click)="clearAndReload()"
+            aria-label="Limpiar caché y recargar datos desde la API">
       <mat-icon>delete_sweep</mat-icon>
       Limpiar Caché
     </button>
-    <button mat-raised-button class="add-button" (click)="openCreateDialog()">
+    <button mat-raised-button 
+            class="add-button" 
+            id="add-movie-button"
+            (click)="openCreateDialog()"
+            aria-label="Agregar nueva película">
       <mat-icon>add</mat-icon>
       Agregar Película
     </button>
   </mat-toolbar>
 
-  <!-- Search Bar -->
-  <div class="search-container">
+  <!-- Search Bar con Tabs integrados -->
+  <div class="search-tabs-container" 
+       id="search-container"
+       role="search"
+       aria-label="Búsqueda de películas">
+    
+    <!-- Botón Películas a la izquierda -->
+    <button mat-raised-button 
+            [class.active]="currentTab === 'movies'"
+            (click)="onTabChange('movies')"
+            class="tab-button tab-left">
+      <mat-icon>movie</mat-icon>
+      Películas
+    </button>
+
+    <!-- Buscador en el centro -->
     <mat-form-field appearance="outline" class="search-field">
       <mat-label>Buscar películas...</mat-label>
-      <input matInput [(ngModel)]="searchTerm" (keyup)="onSearch()" placeholder="Título, descripción o género">
+      <input matInput 
+             id="movie-search-input"
+             [(ngModel)]="searchTerm" 
+             (keyup)="onSearch()" 
+             placeholder="Título, descripción o género"
+             aria-label="Campo de búsqueda de películas"
+             aria-describedby="search-help">
       <mat-icon matPrefix>search</mat-icon>
-      <button mat-icon-button matSuffix *ngIf="searchTerm" (click)="clearSearch()">
+      <button mat-icon-button 
+              matSuffix 
+              *ngIf="searchTerm" 
+              (click)="clearSearch()"
+              id="clear-search-button"
+              aria-label="Limpiar búsqueda">
         <mat-icon>close</mat-icon>
       </button>
     </mat-form-field>
+
+    <!-- Botón Series a la derecha -->
+    <button mat-raised-button 
+            [class.active]="currentTab === 'series'"
+            (click)="onTabChange('series')"
+            class="tab-button tab-right">
+      <mat-icon>tv</mat-icon>
+      Series
+    </button>
+
+    <span id="search-help" class="sr-only">Busca por título, descripción o género de película</span>
+  </div>
+
+  <!-- Results Summary & Filters Info -->
+  <div *ngIf="!loading && !error" 
+       class="results-summary" 
+       id="results-summary"
+       role="status"
+       aria-live="polite">
+    <div class="summary-content">
+      <!-- Total Results -->
+      <div class="total-results">
+        <mat-icon class="summary-icon">{{ currentTab === 'movies' ? 'movie_filter' : 'tv' }}</mat-icon>
+        <span class="results-text">
+          <strong>{{ filteredMovies.length }}</strong> 
+          {{ filteredMovies.length === 1 ? (currentTab === 'movies' ? 'película encontrada' : 'serie encontrada') : (currentTab === 'movies' ? 'películas encontradas' : 'series encontradas') }}
+          <span *ngIf="filteredMovies.length !== (currentTab === 'movies' ? movies : series).length" class="original-count">
+            de {{ currentTab === 'movies' ? movies.length : series.length }} total
+          </span>
+        </span>
+      </div>
+
+      <!-- Current Page Info -->
+      <div class="page-info" *ngIf="filteredMovies.length > 0">
+        <mat-icon class="summary-icon">visibility</mat-icon>
+        <span class="results-text">
+          Mostrando 
+          <strong>{{ (pageIndex * pageSize) + 1 }}-{{ Math.min((pageIndex + 1) * pageSize, filteredMovies.length) }}</strong>
+        </span>
+      </div>
+
+      <!-- Active Search Filter -->
+      <div class="active-filters" *ngIf="searchTerm">
+        <mat-chip class="filter-chip">
+          <mat-icon class="chip-icon">search</mat-icon>
+          Búsqueda: "{{ searchTerm }}"
+          <button matChipRemove (click)="clearSearch()" aria-label="Eliminar filtro de búsqueda">
+            <mat-icon>cancel</mat-icon>
+          </button>
+        </mat-chip>
+      </div>
+    </div>
   </div>
 
   <!-- Loading Skeletons -->
@@ -45,31 +137,45 @@
   <!-- No Results -->
   <div *ngIf="!loading && !error && filteredMovies.length === 0" class="no-results">
     <mat-icon>search_off</mat-icon>
-    <p>No se encontraron películas que coincidan con "{{ searchTerm }}"</p>
+    <p>No se encontraron {{ currentTab === 'movies' ? 'películas' : 'series' }} que coincidan con "{{ searchTerm }}"</p>
     <button mat-raised-button color="primary" (click)="clearSearch()">Limpiar Búsqueda</button>
   </div>
 
   <!-- Movies Grid with Pagination -->
-  <div *ngIf="!loading && !error && filteredMovies.length > 0" class="content-container">
-    <div class="movies-grid">
+  <div *ngIf="!loading && !error && filteredMovies.length > 0" 
+       class="content-container" 
+       id="movies-content-container"
+       role="region"
+       aria-label="Listado de películas con paginación">
+    <div class="movies-grid" 
+         id="movies-grid" 
+         role="list"
+         aria-label="Grid de tarjetas de películas">
       <app-movie-card 
-        *ngFor="let movie of paginatedMovies" 
+        *ngFor="let movie of paginatedMovies; trackBy: trackByMovieId" 
+        [id]="'movie-' + movie.id"
+        [attr.data-movie-id]="movie.id"
+        [attr.data-movie-rank]="movie.rank"
+        [attr.aria-label]="'Película: ' + movie.title + ', Ranking #' + movie.rank"
         [movie]="movie"
         (editMovie)="openEditDialog($event)"
         (deleteMovie)="onDeleteMovie($event)"
+        (viewDetail)="onViewDetail($event)"
         class="movie-card-wrapper">
       </app-movie-card>
     </div>
 
     <!-- Paginator -->
     <mat-paginator 
+      id="movies-paginator"
       [length]="totalItems"
       [pageSize]="pageSize"
       [pageIndex]="pageIndex"
       [pageSizeOptions]="pageSizeOptions"
       (page)="onPageChange($event)"
       showFirstLastButtons
-      class="paginator">
+      class="paginator"
+      aria-label="Paginación de películas">
     </mat-paginator>
   </div>
 </div>

@@ -1,4 +1,4 @@
-<mat-card class="movie-card">
+<mat-card class="movie-card" (click)="onCardClick()">
   <div class="card-header">
     <span class="rank-badge">#{{ movie.rank }}</span>
     <div class="action-buttons">
@@ -15,7 +15,10 @@
   </div>
   
   <div class="image-container">
-    <img [src]="movie.big_image || movie.image" [alt]="movie.title" class="movie-image">
+    <img [src]="movie.big_image || movie.image" 
+         [alt]="movie.title" 
+         class="movie-image"
+         (error)="onImageError($event)">
     <div class="image-overlay">
       <mat-icon>play_circle_outline</mat-icon>
     </div>

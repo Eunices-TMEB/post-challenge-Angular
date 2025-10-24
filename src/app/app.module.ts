@@ -29,6 +29,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MovieFormDialogComponent } from './components/movie-form-dialog/movie-form-dialog.component';
 import { MovieSkeletonComponent } from './components/movie-skeleton/movie-skeleton.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { MovieDetailComponent } from './components/movie-detail/movie-detail.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
     MovieCardComponent,
     MovieFormDialogComponent,
     MovieSkeletonComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    MovieDetailComponent
   ],
   imports: [
     BrowserModule,

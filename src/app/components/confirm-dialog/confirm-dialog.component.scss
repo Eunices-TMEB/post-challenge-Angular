@@ -1,6 +1,7 @@
 .confirm-dialog {
   min-width: 400px;
   max-width: 600px;
+  background: #1f1f1f;
   
   @media (max-width: 600px) {
     min-width: 300px;
@@ -12,13 +13,14 @@
   align-items: center;
   gap: 12px;
   padding: 24px 24px 16px 24px;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.3);
   
   h2 {
     margin: 0;
     font-size: 20px;
     font-weight: 600;
-    color: rgba(0, 0, 0, 0.87);
+    color: #f5f5f5;
   }
 }
 
@@ -62,21 +64,23 @@
 
 mat-dialog-content {
   padding: 24px;
+  background: #1f1f1f;
   
   .dialog-message {
     font-size: 15px;
     line-height: 1.6;
-    color: rgba(0, 0, 0, 0.7);
+    color: #b3b3b3;
     margin: 0;
   }
 }
 
 mat-dialog-actions {
   padding: 16px 24px;
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   gap: 12px;
   display: flex;
   justify-content: flex-end;
+  background: rgba(0, 0, 0, 0.3);
   
   @media (max-width: 600px) {
     flex-direction: column-reverse;
@@ -89,13 +93,14 @@ mat-dialog-actions {
   }
 }
 
-// Botón CANCELAR - Verde (acción segura)
+// Botón CANCELAR - Gris (acción segura)
 .cancel-button {
-  background: #22c55e !important; // Verde
-  color: white !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #f5f5f5 !important;
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
   
   mat-icon {
     font-size: 20px;
@@ -105,9 +110,10 @@ mat-dialog-actions {
   }
   
   &:hover {
-    background: #16a34a !important; // Verde más oscuro
-    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+    background: rgba(255, 255, 255, 0.15) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     transform: translateY(-1px);
+    border-color: rgba(255, 255, 255, 0.3) !important;
   }
 }
 
@@ -142,14 +148,15 @@ mat-dialog-actions {
   }
 }
 
-// Botón WARNING - Naranja (advertencia)
+// Botón WARNING - Amarillo IMDB (advertencia)
 .confirm-button-warning {
-  background: #f59e0b !important; // Naranja
-  color: white !important;
+  background: linear-gradient(135deg, #f5c518 0%, #d4a017 100%) !important;
+  color: #000 !important;
+  font-weight: 700 !important;
   
   &:hover {
-    background: #d97706 !important; // Naranja más oscuro
-    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.5);
+    background: linear-gradient(135deg, #ffd700 0%, #f5c518 100%) !important;
+    box-shadow: 0 4px 16px rgba(245, 197, 24, 0.5);
   }
 }
 

@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -8,6 +9,7 @@ import { MoviesService } from '../../services/movies.service';
 import { Movie } from '../../models/movie.model';
 import { MovieFormDialogComponent } from '../movie-form-dialog/movie-form-dialog.component';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-movie-list',
@@ -19,6 +21,7 @@ export class MovieListComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   
   movies: Movie[] = [];
+  series: Movie[] = [];
   filteredMovies: Movie[] = [];
   paginatedMovies: Movie[] = [];
   dataSource: MatTableDataSource<Movie> = new MatTableDataSource<Movie>([]);
@@ -26,6 +29,8 @@ export class MovieListComponent implements OnInit, AfterViewInit {
   loading: boolean = true;
   error: string = '';
   searchTerm: string = '';
+  currentTab: 'movies' | 'series' = 'movies';
+  private readonly TAB_STORAGE_KEY = 'current_tab';
   
   // Vista: 'grid' o 'table'
   viewMode: 'grid' | 'table' = 'grid';
@@ -38,15 +43,26 @@ export class MovieListComponent implements OnInit, AfterViewInit {
   
   // Columnas de la tabla
   displayedColumns: string[] = ['rank', 'title', 'year', 'rating', 'genre', 'director', 'actions'];
+  
+  // Exponer Math para el template
+  Math = Math;
 
   constructor(
     private moviesService: MoviesService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
-    this.loadMovies();
+    // Restaurar el tab guardado ANTES de cargar datos
+    const savedTab = sessionStorage.getItem(this.TAB_STORAGE_KEY) as 'movies' | 'series' | null;
+    if (savedTab) {
+      this.currentTab = savedTab;
+    }
+    
+    // Cargar ambos conjuntos de datos de manera coordinada
+    this.loadAllData();
   }
 
   ngAfterViewInit(): void {
@@ -58,17 +74,48 @@ export class MovieListComponent implements OnInit, AfterViewInit {
     }
   }
 
+  loadAllData(): void {
+    this.loading = true;
+    
+    forkJoin({
+      movies: this.moviesService.getTop100Movies(),
+      series: this.moviesService.getTop100Series()
+    }).subscribe({
+      next: (result) => {
+        console.log('Películas cargadas:', result.movies.length);
+        console.log('Series cargadas:', result.series.length);
+        
+        this.movies = result.movies;
+        this.series = result.series;
+        
+        // Mostrar los datos del tab activo
+        const activeData = this.currentTab === 'movies' ? this.movies : this.series;
+        this.filteredMovies = activeData;
+        this.totalItems = activeData.length;
+        this.dataSource.data = activeData;
+        this.updatePaginatedMovies();
+        this.loading = false;
+      },
+      error: (error) => {
+        this.error = 'Error al cargar los datos. Por favor, intenta de nuevo más tarde.';
+        this.loading = false;
+        console.error('Error loading data:', error);
+      }
+    });
+  }
+
   loadMovies(): void {
     this.loading = true;
     this.moviesService.getTop100Movies().subscribe({
       next: (data) => {
-        console.log('Películas cargadas:', data);
-        console.log('Primera película:', data[0]);
+        console.log('Películas recargadas:', data);
         this.movies = data;
-        this.filteredMovies = data;
-        this.totalItems = data.length;
-        this.dataSource.data = data;
-        this.updatePaginatedMovies();
+        if (this.currentTab === 'movies') {
+          this.filteredMovies = data;
+          this.totalItems = data.length;
+          this.dataSource.data = data;
+          this.updatePaginatedMovies();
+        }
         this.loading = false;
       },
       error: (error) => {
@@ -77,6 +124,43 @@ export class MovieListComponent implements OnInit, AfterViewInit {
         console.error('Error loading movies:', error);
       }
     });
+  }
+
+  loadSeries(): void {
+    this.loading = true;
+    this.moviesService.getTop100Series().subscribe({
+      next: (data) => {
+        console.log('Series recargadas:', data);
+        this.series = data;
+        if (this.currentTab === 'series') {
+          this.filteredMovies = data;
+          this.totalItems = data.length;
+          this.dataSource.data = data;
+          this.updatePaginatedMovies();
+        }
+        this.loading = false;
+      },
+      error: (error) => {
+        this.error = 'Error al cargar las series. Por favor, intenta de nuevo más tarde.';
+        this.loading = false;
+        console.error('Error loading series:', error);
+      }
+    });
+  }
+
+  onTabChange(tab: 'movies' | 'series'): void {
+    this.currentTab = tab;
+    // Guardar el tab actual en sessionStorage
+    sessionStorage.setItem(this.TAB_STORAGE_KEY, tab);
+    
+    this.searchTerm = '';
+    this.pageIndex = 0;
+    
+    const data = tab === 'movies' ? this.movies : this.series;
+    this.filteredMovies = data;
+    this.totalItems = data.length;
+    this.dataSource.data = data;
+    this.updatePaginatedMovies();
   }
   
   toggleView(mode: 'grid' | 'table'): void {
@@ -90,9 +174,6 @@ export class MovieListComponent implements OnInit, AfterViewInit {
     this.pageSize = event.pageSize;
     this.pageIndex = event.pageIndex;
     this.updatePaginatedMovies();
-    
-    // Scroll hacia arriba al cambiar de página
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
   
   updatePaginatedMovies(): void {
@@ -103,16 +184,18 @@ export class MovieListComponent implements OnInit, AfterViewInit {
   }
 
   onSearch(): void {
+    const sourceData = this.currentTab === 'movies' ? this.movies : this.series;
+    
     if (!this.searchTerm.trim()) {
-      this.filteredMovies = this.movies;
-      this.dataSource.data = this.movies;
+      this.filteredMovies = sourceData;
+      this.dataSource.data = sourceData;
       this.pageIndex = 0;
       this.updatePaginatedMovies();
       return;
     }
 
     const term = this.searchTerm.toLowerCase();
-    this.filteredMovies = this.movies.filter(movie =>
+    this.filteredMovies = sourceData.filter(movie =>
       movie.title.toLowerCase().includes(term) ||
       movie.description.toLowerCase().includes(term) ||
       movie.genre.some(g => g.toLowerCase().includes(term))
@@ -125,8 +208,9 @@ export class MovieListComponent implements OnInit, AfterViewInit {
 
   clearSearch(): void {
     this.searchTerm = '';
-    this.filteredMovies = this.movies;
-    this.dataSource.data = this.movies;
+    const sourceData = this.currentTab === 'movies' ? this.movies : this.series;
+    this.filteredMovies = sourceData;
+    this.dataSource.data = sourceData;
     this.pageIndex = 0;
     this.updatePaginatedMovies();
   }
@@ -168,28 +252,40 @@ export class MovieListComponent implements OnInit, AfterViewInit {
   createMovie(movie: Movie): void {
     this.moviesService.createMovie(movie).subscribe({
       next: (newMovie) => {
-        // Agregar la película al array local (NO recargar desde servicio)
-        this.movies.push(newMovie);
-        this.filteredMovies = [...this.movies];
+        // Agregar al array correspondiente
+        if (this.currentTab === 'movies') {
+          this.movies.push(newMovie);
+          this.filteredMovies = [...this.movies];
+        } else {
+          this.series.push(newMovie);
+          this.filteredMovies = [...this.series];
+        }
         this.dataSource.data = this.filteredMovies;
         this.updatePaginatedMovies();
-        this.showSnackBar('¡Película creada exitosamente! 🎬', 'success');
+        const tipo = this.currentTab === 'movies' ? 'Película' : 'Serie';
+        this.showSnackBar(`¡${tipo} creada exitosamente! 🎬`, 'success');
       },
       error: (error) => {
-        this.showSnackBar('Error al crear la película. Por favor, intenta de nuevo.', 'error');
-        console.error('Error creating movie:', error);
+        const tipo = this.currentTab === 'movies' ? 'película' : 'serie';
+        this.showSnackBar(`Error al crear la ${tipo}. Por favor, intenta de nuevo.`, 'error');
+        console.error('Error creating:', error);
       }
     });
   }
 
   updateMovie(movie: Movie): void {
-    this.moviesService.updateMovie(movie).subscribe({
+    const tipo = this.currentTab === 'movies' ? 'Película' : 'Serie';
+    const tipoLower = tipo.toLowerCase();
+    
+    // Pasar el tipo al servicio para actualizar el localStorage correcto
+    this.moviesService.updateMovie(movie, this.currentTab).subscribe({
       next: () => {
-        // Actualizar la película en el array local (NO recargar desde servicio)
-        const index = this.movies.findIndex(m => m.id === movie.id);
+        // Actualizar en el array correspondiente
+        const sourceData = this.currentTab === 'movies' ? this.movies : this.series;
+        const index = sourceData.findIndex(m => m.id === movie.id);
         if (index !== -1) {
-          this.movies[index] = movie;
-          this.filteredMovies = [...this.movies];
+          sourceData[index] = movie;
+          this.filteredMovies = [...sourceData];
           this.dataSource.data = this.filteredMovies;
           this.updatePaginatedMovies();
           // Re-aplicar búsqueda si hay filtro activo
@@ -197,21 +293,22 @@ export class MovieListComponent implements OnInit, AfterViewInit {
             this.onSearch();
           }
         }
-        this.showSnackBar('¡Película actualizada exitosamente! ✏️', 'success');
+        this.showSnackBar(`¡${tipo} actualizada exitosamente! ✏️`, 'success');
       },
       error: (error) => {
-        this.showSnackBar('Error al actualizar la película. Por favor, intenta de nuevo.', 'error');
-        console.error('Error updating movie:', error);
+        this.showSnackBar(`Error al actualizar la ${tipoLower}. Por favor, intenta de nuevo.`, 'error');
+        console.error('Error updating:', error);
       }
     });
   }
 
   onDeleteMovie(movie: Movie): void {
+    const tipo = this.currentTab === 'movies' ? 'Película' : 'Serie';
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '500px',
       maxWidth: '95vw',
       data: {
-        title: 'Eliminar Película',
+        title: `Eliminar ${tipo}`,
         message: `¿Estás seguro de que deseas eliminar "${movie.title}"? Esta acción no se puede deshacer.`,
         confirmText: 'Eliminar',
         cancelText: 'Cancelar',
@@ -221,26 +318,34 @@ export class MovieListComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.moviesService.deleteMovie(movie.id).subscribe({
+        // Pasar el tipo al servicio para actualizar el localStorage correcto
+        this.moviesService.deleteMovie(movie.id, this.currentTab).subscribe({
           next: (success) => {
             if (success) {
-              // Eliminar la película del array local (NO recargar desde servicio)
-              this.movies = this.movies.filter(m => m.id !== movie.id);
-              this.filteredMovies = [...this.movies];
+              // Eliminar del array correspondiente
+              if (this.currentTab === 'movies') {
+                this.movies = this.movies.filter(m => m.id !== movie.id);
+                this.filteredMovies = [...this.movies];
+              } else {
+                this.series = this.series.filter(m => m.id !== movie.id);
+                this.filteredMovies = [...this.series];
+              }
               this.dataSource.data = this.filteredMovies;
               this.updatePaginatedMovies();
               // Re-aplicar búsqueda si hay filtro activo
               if (this.searchTerm) {
                 this.onSearch();
               }
-              this.showSnackBar('¡Película eliminada exitosamente! 🗑️', 'success');
+              this.showSnackBar(`¡${tipo} eliminada exitosamente! 🗑️`, 'success');
             } else {
-              this.showSnackBar('Error al eliminar la película. Por favor, intenta de nuevo.', 'error');
+              const tipoLower = tipo.toLowerCase();
+              this.showSnackBar(`Error al eliminar la ${tipoLower}. Por favor, intenta de nuevo.`, 'error');
             }
           },
           error: (error) => {
-            this.showSnackBar('Error al eliminar la película. Por favor, intenta de nuevo.', 'error');
-            console.error('Error deleting movie:', error);
+            const tipoLower = tipo.toLowerCase();
+            this.showSnackBar(`Error al eliminar la ${tipoLower}. Por favor, intenta de nuevo.`, 'error');
+            console.error('Error deleting:', error);
           }
         });
       }
@@ -248,12 +353,13 @@ export class MovieListComponent implements OnInit, AfterViewInit {
   }
 
   resetToOriginal(): void {
+    const tipo = this.currentTab === 'movies' ? 'películas' : 'series';
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '500px',
       maxWidth: '95vw',
       data: {
         title: 'Restaurar Datos Originales',
-        message: '¿Estás seguro de que deseas restaurar todos los datos a su estado original? Todos los cambios se perderán.',
+        message: `¿Estás seguro de que deseas restaurar todas las ${tipo} a su estado original? Todos los cambios se perderán.`,
         confirmText: 'Restaurar',
         cancelText: 'Cancelar',
         type: 'warning'
@@ -263,9 +369,13 @@ export class MovieListComponent implements OnInit, AfterViewInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.loading = true;
-        this.moviesService.resetToOriginal().subscribe({
+        this.moviesService.resetToOriginal(this.currentTab).subscribe({
           next: (data) => {
-            this.movies = data;
+            if (this.currentTab === 'movies') {
+              this.movies = data;
+            } else {
+              this.series = data;
+            }
             this.filteredMovies = data;
             this.dataSource.data = data;
             this.pageIndex = 0;
@@ -327,6 +437,17 @@ export class MovieListComponent implements OnInit, AfterViewInit {
 
   getGenresString(genres: string[]): string {
     return genres.join(', ');
+  }
+
+  // TrackBy function para mejorar rendimiento y identificación única
+  trackByMovieId(index: number, movie: Movie): string {
+    return movie.id;
+  }
+
+  onViewDetail(movie: Movie): void {
+    // Navegar con el tipo para diferenciar películas de series
+    const type = this.currentTab === 'movies' ? 'movie' : 'series';
+    this.router.navigate(['/ejercicio', type, movie.id]);
   }
 
   private showSnackBar(message: string, type: 'success' | 'error'): void {

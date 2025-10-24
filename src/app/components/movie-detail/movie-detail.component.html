@@ -1,0 +1,130 @@
+<div class="movie-detail-container">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Cargando {{ contentType === 'movie' ? 'película' : 'serie' }}...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="error-container">
+    <mat-icon color="warn">error</mat-icon>
+    <p>{{ error }}</p>
+    <button mat-raised-button color="primary" (click)="goBack()">Volver</button>
+  </div>
+
+  <!-- Movie Detail -->
+  <div *ngIf="movie && !loading && !error" class="detail-content">
+    <!-- Header con botón de volver -->
+    <div class="detail-header">
+      <button mat-icon-button (click)="goBack()" class="back-button" matTooltip="Volver">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1 class="page-title">Detalle de {{ contentType === 'movie' ? 'Película' : 'Serie' }}</h1>
+    </div>
+
+    <!-- Contenido Principal -->
+    <div class="movie-detail-card">
+      <!-- Imagen y información básica -->
+      <div class="detail-main">
+        <div class="image-section">
+          <img [src]="movie.big_image || movie.image" 
+               [alt]="movie.title" 
+               class="detail-image"
+               (error)="onImageError($event)">
+          <div class="rank-badge-large">#{{ movie.rank }}</div>
+        </div>
+
+        <div class="info-section">
+          <h2 class="movie-title">{{ movie.title }}</h2>
+          
+          <div class="movie-meta">
+            <div class="meta-item">
+              <mat-icon class="meta-icon">calendar_today</mat-icon>
+              <span class="meta-label">Año:</span>
+              <span class="meta-value">{{ movie.year }}</span>
+            </div>
+            
+            <div class="meta-item rating">
+              <mat-icon class="meta-icon star">star</mat-icon>
+              <span class="meta-label">Calificación:</span>
+              <span class="meta-value rating-value">{{ movie.rating }}</span>
+            </div>
+            
+            <div class="meta-item">
+              <mat-icon class="meta-icon">tag</mat-icon>
+              <span class="meta-label">Ranking:</span>
+              <span class="meta-value">#{{ movie.rank }}</span>
+            </div>
+          </div>
+
+          <div class="genres-section">
+            <h3>Géneros</h3>
+            <mat-chip-set>
+              <mat-chip *ngFor="let genre of movie.genre" class="genre-chip">
+                {{ genre }}
+              </mat-chip>
+            </mat-chip-set>
+          </div>
+
+          <div class="description-section">
+            <h3>Sinopsis</h3>
+            <p class="description">{{ movie.description }}</p>
+          </div>
+
+          <!-- Información adicional -->
+          <div class="additional-info">
+            <div *ngIf="movie.director && movie.director.length > 0" class="info-group">
+              <h3>
+                <mat-icon>person</mat-icon>
+                Director{{ movie.director.length > 1 ? 'es' : '' }}
+              </h3>
+              <ul class="info-list">
+                <li *ngFor="let director of movie.director">{{ director }}</li>
+              </ul>
+            </div>
+
+            <div *ngIf="movie.writers && movie.writers.length > 0" class="info-group">
+              <h3>
+                <mat-icon>edit_note</mat-icon>
+                Escritor{{ movie.writers.length > 1 ? 'es' : '' }}
+              </h3>
+              <ul class="info-list">
+                <li *ngFor="let writer of movie.writers">{{ writer }}</li>
+              </ul>
+            </div>
+
+            <div class="info-group">
+              <h3>
+                <mat-icon>link</mat-icon>
+                Enlaces
+              </h3>
+              <div class="links">
+                <a [href]="movie.imdb_link" target="_blank" class="imdb-link" mat-raised-button color="accent">
+                  <mat-icon>open_in_new</mat-icon>
+                  Ver en IMDB
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Botones de acción -->
+          <div class="action-buttons">
+            <button mat-raised-button color="primary" (click)="openEditDialog()">
+              <mat-icon>edit</mat-icon>
+              Editar {{ contentType === 'movie' ? 'Película' : 'Serie' }}
+            </button>
+            <button mat-raised-button color="warn" (click)="deleteMovie()">
+              <mat-icon>delete</mat-icon>
+              Eliminar {{ contentType === 'movie' ? 'Película' : 'Serie' }}
+            </button>
+            <button mat-raised-button (click)="openIMDB()">
+              <mat-icon>open_in_new</mat-icon>
+              Ver en IMDB
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
