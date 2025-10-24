@@ -3,76 +3,111 @@
 <mat-dialog-content>
   <form [formGroup]="movieForm" class="movie-form">
     <!-- Title -->
-    <mat-form-field appearance="outline">
-      <mat-label>Título</mat-label>
+    <mat-form-field appearance="outline" 
+                    [class.field-error]="movieForm.get('title')?.invalid && movieForm.get('title')?.touched"
+                    [class.field-valid]="movieForm.get('title')?.valid && movieForm.get('title')?.touched">
+      <mat-label>Título *</mat-label>
       <input matInput formControlName="title" placeholder="Ingresa el título de la película" required>
       <mat-icon matPrefix>movie</mat-icon>
+      <mat-icon matSuffix class="error-icon" *ngIf="movieForm.get('title')?.invalid && movieForm.get('title')?.touched">error</mat-icon>
+      <mat-icon matSuffix class="success-icon" *ngIf="movieForm.get('title')?.valid && movieForm.get('title')?.touched">check_circle</mat-icon>
       <mat-error *ngIf="movieForm.get('title')?.invalid && movieForm.get('title')?.touched">
+        <mat-icon class="error-icon-inline">warning</mat-icon>
         {{ getErrorMessage('title') }}
       </mat-error>
     </mat-form-field>
 
     <!-- Description -->
-    <mat-form-field appearance="outline">
-      <mat-label>Descripción</mat-label>
+    <mat-form-field appearance="outline"
+                    [class.field-error]="movieForm.get('description')?.invalid && movieForm.get('description')?.touched"
+                    [class.field-valid]="movieForm.get('description')?.valid && movieForm.get('description')?.touched">
+      <mat-label>Descripción *</mat-label>
       <textarea matInput formControlName="description" rows="4" placeholder="Ingresa la descripción de la película" required></textarea>
       <mat-icon matPrefix>description</mat-icon>
+      <mat-icon matSuffix class="error-icon" *ngIf="movieForm.get('description')?.invalid && movieForm.get('description')?.touched">error</mat-icon>
+      <mat-icon matSuffix class="success-icon" *ngIf="movieForm.get('description')?.valid && movieForm.get('description')?.touched">check_circle</mat-icon>
       <mat-error *ngIf="movieForm.get('description')?.invalid && movieForm.get('description')?.touched">
+        <mat-icon class="error-icon-inline">warning</mat-icon>
         {{ getErrorMessage('description') }}
       </mat-error>
     </mat-form-field>
 
     <!-- Year and Rating Row -->
     <div class="form-row">
-      <mat-form-field appearance="outline">
-        <mat-label>Año</mat-label>
+      <mat-form-field appearance="outline"
+                      [class.field-error]="movieForm.get('year')?.invalid && movieForm.get('year')?.touched"
+                      [class.field-valid]="movieForm.get('year')?.valid && movieForm.get('year')?.touched">
+        <mat-label>Año *</mat-label>
         <input matInput type="number" formControlName="year" placeholder="2023" required>
         <mat-icon matPrefix>calendar_today</mat-icon>
+        <mat-icon matSuffix class="error-icon" *ngIf="movieForm.get('year')?.invalid && movieForm.get('year')?.touched">error</mat-icon>
+        <mat-icon matSuffix class="success-icon" *ngIf="movieForm.get('year')?.valid && movieForm.get('year')?.touched">check_circle</mat-icon>
         <mat-error *ngIf="movieForm.get('year')?.invalid && movieForm.get('year')?.touched">
+          <mat-icon class="error-icon-inline">warning</mat-icon>
           {{ getErrorMessage('year') }}
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field appearance="outline">
-        <mat-label>Calificación</mat-label>
+      <mat-form-field appearance="outline"
+                      [class.field-error]="movieForm.get('rating')?.invalid && movieForm.get('rating')?.touched"
+                      [class.field-valid]="movieForm.get('rating')?.valid && movieForm.get('rating')?.touched">
+        <mat-label>Calificación *</mat-label>
         <input matInput type="text" formControlName="rating" placeholder="8.5" required>
         <mat-icon matPrefix>star</mat-icon>
+        <mat-icon matSuffix class="error-icon" *ngIf="movieForm.get('rating')?.invalid && movieForm.get('rating')?.touched">error</mat-icon>
+        <mat-icon matSuffix class="success-icon" *ngIf="movieForm.get('rating')?.valid && movieForm.get('rating')?.touched">check_circle</mat-icon>
         <mat-error *ngIf="movieForm.get('rating')?.invalid && movieForm.get('rating')?.touched">
+          <mat-icon class="error-icon-inline">warning</mat-icon>
           {{ getErrorMessage('rating') }}
         </mat-error>
       </mat-form-field>
     </div>
 
     <!-- Genre -->
-    <mat-form-field appearance="outline">
-      <mat-label>Géneros</mat-label>
+    <mat-form-field appearance="outline"
+                    [class.field-error]="movieForm.get('genre')?.invalid && movieForm.get('genre')?.touched"
+                    [class.field-valid]="movieForm.get('genre')?.valid && movieForm.get('genre')?.touched">
+      <mat-label>Géneros *</mat-label>
       <mat-select formControlName="genre" multiple required>
         <mat-option *ngFor="let genre of availableGenres" [value]="genre">
           {{ genre }}
         </mat-option>
       </mat-select>
       <mat-icon matPrefix>category</mat-icon>
+      <mat-icon matSuffix class="error-icon" *ngIf="movieForm.get('genre')?.invalid && movieForm.get('genre')?.touched">error</mat-icon>
+      <mat-icon matSuffix class="success-icon" *ngIf="movieForm.get('genre')?.valid && movieForm.get('genre')?.touched">check_circle</mat-icon>
       <mat-error *ngIf="movieForm.get('genre')?.invalid && movieForm.get('genre')?.touched">
+        <mat-icon class="error-icon-inline">warning</mat-icon>
         {{ getErrorMessage('genre') }}
       </mat-error>
     </mat-form-field>
 
     <!-- Image URL -->
-    <mat-form-field appearance="outline">
-      <mat-label>URL de Imagen</mat-label>
+    <mat-form-field appearance="outline"
+                    [class.field-error]="movieForm.get('image')?.invalid && movieForm.get('image')?.touched"
+                    [class.field-valid]="movieForm.get('image')?.valid && movieForm.get('image')?.touched">
+      <mat-label>URL de Imagen *</mat-label>
       <input matInput formControlName="image" placeholder="https://ejemplo.com/imagen.jpg" required>
       <mat-icon matPrefix>image</mat-icon>
+      <mat-icon matSuffix class="error-icon" *ngIf="movieForm.get('image')?.invalid && movieForm.get('image')?.touched">error</mat-icon>
+      <mat-icon matSuffix class="success-icon" *ngIf="movieForm.get('image')?.valid && movieForm.get('image')?.touched">check_circle</mat-icon>
       <mat-error *ngIf="movieForm.get('image')?.invalid && movieForm.get('image')?.touched">
+        <mat-icon class="error-icon-inline">warning</mat-icon>
         {{ getErrorMessage('image') }}
       </mat-error>
     </mat-form-field>
 
     <!-- Large Image URL (Optional) -->
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline"
+                    [class.field-error]="movieForm.get('big_image')?.invalid && movieForm.get('big_image')?.touched"
+                    [class.field-valid]="movieForm.get('big_image')?.valid && movieForm.get('big_image')?.touched && movieForm.get('big_image')?.value">
       <mat-label>URL de Imagen Grande (Opcional)</mat-label>
       <input matInput formControlName="big_image" placeholder="https://ejemplo.com/imagen-grande.jpg">
       <mat-icon matPrefix>photo_size_select_large</mat-icon>
+      <mat-icon matSuffix class="error-icon" *ngIf="movieForm.get('big_image')?.invalid && movieForm.get('big_image')?.touched">error</mat-icon>
+      <mat-icon matSuffix class="success-icon" *ngIf="movieForm.get('big_image')?.valid && movieForm.get('big_image')?.touched && movieForm.get('big_image')?.value">check_circle</mat-icon>
       <mat-error *ngIf="movieForm.get('big_image')?.invalid && movieForm.get('big_image')?.touched">
+        <mat-icon class="error-icon-inline">warning</mat-icon>
         {{ getErrorMessage('big_image') }}
       </mat-error>
     </mat-form-field>
@@ -94,20 +129,43 @@
     </mat-form-field>
 
     <!-- IMDB Link (Optional) -->
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline"
+                    [class.field-error]="movieForm.get('imdb_link')?.invalid && movieForm.get('imdb_link')?.touched"
+                    [class.field-valid]="movieForm.get('imdb_link')?.valid && movieForm.get('imdb_link')?.touched && movieForm.get('imdb_link')?.value">
       <mat-label>Enlace IMDB (Opcional)</mat-label>
       <input matInput formControlName="imdb_link" placeholder="https://www.imdb.com/title/...">
       <mat-icon matPrefix>link</mat-icon>
+      <mat-icon matSuffix class="error-icon" *ngIf="movieForm.get('imdb_link')?.invalid && movieForm.get('imdb_link')?.touched">error</mat-icon>
+      <mat-icon matSuffix class="success-icon" *ngIf="movieForm.get('imdb_link')?.valid && movieForm.get('imdb_link')?.touched && movieForm.get('imdb_link')?.value">check_circle</mat-icon>
       <mat-error *ngIf="movieForm.get('imdb_link')?.invalid && movieForm.get('imdb_link')?.touched">
+        <mat-icon class="error-icon-inline">warning</mat-icon>
         {{ getErrorMessage('imdb_link') }}
       </mat-error>
     </mat-form-field>
+    
+    <!-- Resumen de Validación -->
+    <div class="validation-summary" *ngIf="movieForm.touched && !movieForm.valid">
+      <div class="validation-alert">
+        <mat-icon class="alert-icon">report_problem</mat-icon>
+        <div class="alert-content">
+          <strong>Hay errores en el formulario</strong>
+          <p>Por favor, corrige los campos marcados en rojo antes de continuar.</p>
+        </div>
+      </div>
+    </div>
   </form>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
   <button mat-button (click)="onCancel()" type="button">Cancelar</button>
-  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!movieForm.valid" type="button">
+  <button mat-raised-button 
+          [color]="movieForm.valid ? 'primary' : 'warn'" 
+          (click)="onSubmit()" 
+          [disabled]="!movieForm.valid" 
+          [class.button-disabled]="!movieForm.valid"
+          type="button">
+    <mat-icon *ngIf="!movieForm.valid">block</mat-icon>
+    <mat-icon *ngIf="movieForm.valid">{{ isEditMode ? 'save' : 'add' }}</mat-icon>
     {{ isEditMode ? 'Actualizar' : 'Crear' }}
   </button>
 </mat-dialog-actions>

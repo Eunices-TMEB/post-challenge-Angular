@@ -1,0 +1,37 @@
+<div class="confirm-dialog" [class.dialog-warning]="data.type === 'warning'" 
+                         [class.dialog-danger]="data.type === 'danger'"
+                         [class.dialog-info]="data.type === 'info'">
+  
+  <!-- Header -->
+  <div class="dialog-header">
+    <mat-icon class="dialog-icon">
+      {{ data.type === 'danger' ? 'delete_forever' : data.type === 'warning' ? 'warning' : 'info' }}
+    </mat-icon>
+    <h2 mat-dialog-title>{{ data.title }}</h2>
+  </div>
+
+  <!-- Content -->
+  <mat-dialog-content>
+    <p class="dialog-message">{{ data.message }}</p>
+  </mat-dialog-content>
+
+  <!-- Actions -->
+  <mat-dialog-actions align="end">
+    <button mat-raised-button 
+            (click)="onCancel()" 
+            class="cancel-button">
+      <mat-icon>close</mat-icon>
+      {{ data.cancelText }}
+    </button>
+    <button mat-raised-button 
+            (click)="onConfirm()"
+            [class.confirm-button-danger]="data.type === 'danger'"
+            [class.confirm-button-warning]="data.type === 'warning'"
+            [class.confirm-button-info]="data.type === 'info'"
+            class="confirm-button">
+      <mat-icon>{{ data.type === 'danger' ? 'delete' : data.type === 'warning' ? 'warning' : 'check' }}</mat-icon>
+      {{ data.confirmText }}
+    </button>
+  </mat-dialog-actions>
+</div>
+

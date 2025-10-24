@@ -23,6 +23,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MovieFormDialogComponent } from './components/movie-form-dialog/movie-form-dialog.component';
 import { MovieSkeletonComponent } from './components/movie-skeleton/movie-skeleton.component';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { MovieSkeletonComponent } from './components/movie-skeleton/movie-skelet
     MovieListComponent,
     MovieCardComponent,
     MovieFormDialogComponent,
-    MovieSkeletonComponent
+    MovieSkeletonComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     BrowserModule,

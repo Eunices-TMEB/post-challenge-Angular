@@ -87,15 +87,46 @@
     }
   }
   
+  // Tablet breakpoint
+  @media (max-width: 1024px) {
+    height: auto;
+    padding: 14px;
+    
+    .toolbar-title {
+      font-size: 20px;
+    }
+    
+    .reset-button,
+    .clear-button,
+    .add-button {
+      font-size: 14px;
+      padding: 8px 16px;
+      
+      mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+  
+  // Mobile breakpoint
   @media (max-width: 768px) {
     height: auto;
     padding: 16px;
     flex-wrap: wrap;
     gap: 12px;
     
+    .toolbar-icon {
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
+    
     .toolbar-title {
       font-size: 18px;
       width: 100%;
+      text-align: center;
     }
     
     .reset-button,
@@ -104,6 +135,39 @@
       margin-left: 0;
       flex: 1;
       min-width: 120px;
+      font-size: 12px;
+      
+      mat-icon {
+        margin-right: 2px;
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+  
+  // Small mobile breakpoint
+  @media (max-width: 480px) {
+    padding: 12px;
+    
+    .toolbar-title {
+      font-size: 16px;
+    }
+    
+    .reset-button,
+    .clear-button,
+    .add-button {
+      min-width: 100px;
+      font-size: 11px;
+      padding: 6px 12px;
+      
+      span {
+        display: none; // Hide text on very small screens
+      }
+      
+      mat-icon {
+        margin-right: 0;
+      }
     }
   }
 }
@@ -112,6 +176,16 @@
   max-width: 800px;
   margin: 30px auto;
   padding: 0 20px;
+  
+  @media (max-width: 768px) {
+    margin: 20px auto;
+    padding: 0 16px;
+  }
+  
+  @media (max-width: 480px) {
+    margin: 16px auto;
+    padding: 0 12px;
+  }
   
   .search-field {
     width: 100%;
@@ -255,9 +329,30 @@
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 30px;
   
+  // Large tablets
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+  }
+  
+  // Tablets
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 0 16px;
+  }
+  
+  // Mobile devices
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
     gap: 20px;
+    padding: 0 16px;
+  }
+  
+  // Small mobile devices
+  @media (max-width: 480px) {
+    gap: 16px;
+    padding: 0 12px;
   }
 }
 

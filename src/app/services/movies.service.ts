@@ -13,7 +13,6 @@ export class MoviesService {
     'x-rapidapi-host': 'imdb-top-100-movies.p.rapidapi.com',
     'x-rapidapi-key': 'ef882c9dfbmsh85948ef87308752p17141bjsna15055870fb9'
   });
-  private readonly STORAGE_KEY = 'imdb_movies';
   private readonly ORIGINAL_DATA_KEY = 'imdb_movies_original';
 
   constructor(
@@ -22,24 +21,24 @@ export class MoviesService {
   ) { }
 
   getTop100Movies(): Observable<Movie[]> {
-    // Check if we have data in localStorage
-    const storedMovies = this.getFromLocalStorage();
-    if (storedMovies && storedMovies.length > 0) {
-      console.log('Cargando películas desde localStorage:', storedMovies.length, 'películas');
-      console.log('Primera película desde localStorage:', storedMovies[0]);
-      return of(storedMovies);
+    // Siempre restaura datos originales al cargar
+    // Esto asegura que al hacer F5, los datos vuelven a su estado inicial
+    const originalData = this.getOriginalData();
+    
+    if (originalData && originalData.length > 0) {
+      console.log('Cargando datos originales desde caché:', originalData.length, 'películas');
+      return of(originalData);
     }
 
-    // If not, fetch from API
-    console.log('No hay datos en localStorage, consultando API...');
+    // Si no hay datos originales guardados, consultar la API
+    console.log('No hay datos en caché, consultando API...');
     return this.http.get<Movie[]>(this.apiUrl, { headers: this.headers })
       .pipe(
         map(movies => this.translateMovies(movies)),
         tap(movies => {
           console.log('Películas recibidas y traducidas de la API:', movies.length, 'películas');
           console.log('Primera película traducida:', movies[0]);
-          // Save original data and current data to localStorage
-          this.saveToLocalStorage(movies);
+          // Solo guarda los datos originales (no guarda cambios en localStorage)
           this.saveOriginalData(movies);
         }),
         catchError(this.handleError)
@@ -57,54 +56,34 @@ export class MoviesService {
     }));
   }
 
-  // Create a new movie
+  // Create a new movie (solo en memoria, no persiste en localStorage)
   createMovie(movie: Movie): Observable<Movie> {
-    const movies = this.getFromLocalStorage() || [];
-    
     // Generate new rank and id
-    const maxRank = movies.length > 0 ? Math.max(...movies.map(m => m.rank)) : 0;
-    movie.rank = maxRank + 1;
+    movie.rank = Date.now(); // Usamos timestamp como rank único
     movie.id = `custom_${Date.now()}`;
     movie.imdbid = movie.id;
-    
-    movies.push(movie);
-    this.saveToLocalStorage(movies);
     
     return of(movie);
   }
 
-  // Update a movie
+  // Update a movie (solo en memoria, no persiste en localStorage)
   updateMovie(movie: Movie): Observable<Movie> {
-    const movies = this.getFromLocalStorage() || [];
-    const index = movies.findIndex(m => m.id === movie.id);
-    
-    if (index !== -1) {
-      movies[index] = movie;
-      this.saveToLocalStorage(movies);
-      return of(movie);
-    }
-    
-    return throwError(() => new Error('Movie not found'));
+    // Simplemente retorna la película actualizada
+    // El componente maneja la actualización en su array local
+    return of(movie);
   }
 
-  // Delete a movie
+  // Delete a movie (solo en memoria, no persiste en localStorage)
   deleteMovie(id: string): Observable<boolean> {
-    const movies = this.getFromLocalStorage() || [];
-    const filteredMovies = movies.filter(m => m.id !== id);
-    
-    if (filteredMovies.length < movies.length) {
-      this.saveToLocalStorage(filteredMovies);
-      return of(true);
-    }
-    
-    return of(false);
+    // Simplemente retorna true
+    // El componente maneja la eliminación en su array local
+    return of(true);
   }
 
   // Reset to original data from API
   resetToOriginal(): Observable<Movie[]> {
     const originalData = this.getOriginalData();
     if (originalData && originalData.length > 0) {
-      this.saveToLocalStorage(originalData);
       return of(originalData);
     }
     
@@ -113,36 +92,18 @@ export class MoviesService {
       .pipe(
         map(movies => this.translateMovies(movies)),
         tap(movies => {
-          this.saveToLocalStorage(movies);
           this.saveOriginalData(movies);
         }),
         catchError(this.handleError)
       );
   }
 
-  // Clear all data
+  // Clear all data (limpia solo los datos originales del caché)
   clearLocalStorage(): void {
-    localStorage.removeItem(this.STORAGE_KEY);
+    localStorage.removeItem(this.ORIGINAL_DATA_KEY);
   }
 
   // Private helper methods
-  private saveToLocalStorage(movies: Movie[]): void {
-    try {
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(movies));
-    } catch (error) {
-      console.error('Error saving to localStorage:', error);
-    }
-  }
-
-  private getFromLocalStorage(): Movie[] | null {
-    try {
-      const data = localStorage.getItem(this.STORAGE_KEY);
-      return data ? JSON.parse(data) : null;
-    } catch (error) {
-      console.error('Error reading from localStorage:', error);
-      return null;
-    }
-  }
 
   private saveOriginalData(movies: Movie[]): void {
     try {

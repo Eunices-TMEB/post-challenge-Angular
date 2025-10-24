@@ -1,0 +1,166 @@
+.confirm-dialog {
+  min-width: 400px;
+  max-width: 600px;
+  
+  @media (max-width: 600px) {
+    min-width: 300px;
+  }
+}
+
+.dialog-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 24px 16px 24px;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.08);
+  
+  h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.87);
+  }
+}
+
+.dialog-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+// Estilos por tipo
+.dialog-warning {
+  .dialog-icon {
+    color: #f59e0b;
+  }
+  
+  .dialog-header {
+    border-bottom-color: rgba(245, 158, 11, 0.2);
+  }
+}
+
+.dialog-danger {
+  .dialog-icon {
+    color: #ef4444;
+  }
+  
+  .dialog-header {
+    border-bottom-color: rgba(239, 68, 68, 0.2);
+  }
+}
+
+.dialog-info {
+  .dialog-icon {
+    color: #3b82f6;
+  }
+  
+  .dialog-header {
+    border-bottom-color: rgba(59, 130, 246, 0.2);
+  }
+}
+
+mat-dialog-content {
+  padding: 24px;
+  
+  .dialog-message {
+    font-size: 15px;
+    line-height: 1.6;
+    color: rgba(0, 0, 0, 0.7);
+    margin: 0;
+  }
+}
+
+mat-dialog-actions {
+  padding: 16px 24px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  gap: 12px;
+  display: flex;
+  justify-content: flex-end;
+  
+  @media (max-width: 600px) {
+    flex-direction: column-reverse;
+    gap: 8px;
+    
+    button {
+      width: 100%;
+      margin: 0 !important;
+    }
+  }
+}
+
+// Botón CANCELAR - Verde (acción segura)
+.cancel-button {
+  background: #22c55e !important; // Verde
+  color: white !important;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
+  transition: all 0.3s ease;
+  
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    margin-right: 4px;
+  }
+  
+  &:hover {
+    background: #16a34a !important; // Verde más oscuro
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+    transform: translateY(-1px);
+  }
+}
+
+// Botón CONFIRMAR - Base
+.confirm-button {
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+  
+  &:hover {
+    transform: translateY(-1px);
+  }
+}
+
+// Botón DANGER - Rojo (eliminar, destructivo)
+.confirm-button-danger {
+  background: #ef4444 !important; // Rojo
+  color: white !important;
+  
+  &:hover {
+    background: #dc2626 !important; // Rojo más oscuro
+    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.5);
+  }
+}
+
+// Botón WARNING - Naranja (advertencia)
+.confirm-button-warning {
+  background: #f59e0b !important; // Naranja
+  color: white !important;
+  
+  &:hover {
+    background: #d97706 !important; // Naranja más oscuro
+    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.5);
+  }
+}
+
+// Botón INFO - Azul (información)
+.confirm-button-info {
+  background: #3b82f6 !important; // Azul
+  color: white !important;
+  
+  &:hover {
+    background: #2563eb !important; // Azul más oscuro
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.5);
+  }
+}
+
