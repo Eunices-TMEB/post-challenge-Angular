@@ -1,0 +1,61 @@
+<div class="movie-list-container">
+  <!-- Header -->
+  <mat-toolbar color="primary" class="toolbar">
+    <mat-icon class="toolbar-icon">movie</mat-icon>
+    <span class="toolbar-title">Top 100 Películas IMDB</span>
+    <span class="spacer"></span>
+    <button mat-raised-button class="reset-button" (click)="resetToOriginal()">
+      <mat-icon>refresh</mat-icon>
+      Restaurar Datos
+    </button>
+    <button mat-raised-button class="clear-button" (click)="clearAndReload()">
+      <mat-icon>delete_sweep</mat-icon>
+      Limpiar Caché
+    </button>
+    <button mat-raised-button class="add-button" (click)="openCreateDialog()">
+      <mat-icon>add</mat-icon>
+      Agregar Película
+    </button>
+  </mat-toolbar>
+
+  <!-- Search Bar -->
+  <div class="search-container">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Buscar películas...</mat-label>
+      <input matInput [(ngModel)]="searchTerm" (keyup)="onSearch()" placeholder="Título, descripción o género">
+      <mat-icon matPrefix>search</mat-icon>
+      <button mat-icon-button matSuffix *ngIf="searchTerm" (click)="clearSearch()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+
+  <!-- Loading Skeletons -->
+  <div *ngIf="loading" class="movies-grid">
+    <app-movie-skeleton *ngFor="let item of [1,2,3,4,5,6,7,8,9,10,11,12]"></app-movie-skeleton>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="error && !loading" class="error-container">
+    <mat-icon color="warn">error</mat-icon>
+    <p>{{ error }}</p>
+    <button mat-raised-button color="primary" (click)="loadMovies()">Reintentar</button>
+  </div>
+
+  <!-- Movies Grid -->
+  <div *ngIf="!loading && !error" class="movies-grid">
+    <div *ngIf="filteredMovies.length === 0" class="no-results">
+      <mat-icon>search_off</mat-icon>
+      <p>No se encontraron películas que coincidan con "{{ searchTerm }}"</p>
+      <button mat-raised-button color="primary" (click)="clearSearch()">Limpiar Búsqueda</button>
+    </div>
+    
+    <app-movie-card 
+      *ngFor="let movie of filteredMovies" 
+      [movie]="movie"
+      (editMovie)="openEditDialog($event)"
+      (deleteMovie)="onDeleteMovie($event)"
+      class="movie-card-wrapper">
+    </app-movie-card>
+  </div>
+</div>

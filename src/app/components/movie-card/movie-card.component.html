@@ -1,0 +1,54 @@
+<mat-card class="movie-card">
+  <div class="card-header">
+    <span class="rank-badge">#{{ movie.rank }}</span>
+    <div class="action-buttons">
+      <button mat-icon-button class="edit-button" (click)="onEdit($event)" matTooltip="Editar película">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button class="delete-button" (click)="onDelete($event)" matTooltip="Eliminar película">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <button mat-icon-button class="imdb-button" (click)="openIMDB()" matTooltip="Ver en IMDB">
+        <mat-icon>open_in_new</mat-icon>
+      </button>
+    </div>
+  </div>
+  
+  <div class="image-container">
+    <img [src]="movie.big_image || movie.image" [alt]="movie.title" class="movie-image">
+    <div class="image-overlay">
+      <mat-icon>play_circle_outline</mat-icon>
+    </div>
+  </div>
+  
+  <mat-card-content>
+    <h2 class="movie-title">{{ movie.title }}</h2>
+    
+    <div class="movie-info">
+      <div class="info-item">
+        <mat-icon class="info-icon">calendar_today</mat-icon>
+        <span>{{ movie.year }}</span>
+      </div>
+      <div class="info-item rating">
+        <mat-icon class="info-icon star">star</mat-icon>
+        <span class="rating-value">{{ movie.rating }}</span>
+      </div>
+    </div>
+    
+    <p class="movie-description">{{ movie.description }}</p>
+    
+    <div class="genres">
+      <mat-chip-set>
+        <mat-chip *ngFor="let genre of movie.genre.slice(0, 3)">
+          {{ genre }}
+        </mat-chip>
+      </mat-chip-set>
+    </div>
+    
+    <div *ngIf="movie.director && movie.director.length > 0" class="director-info">
+      <mat-icon>person</mat-icon>
+      <span class="director-label">Director:</span>
+      <span class="director-name">{{ movie.director[0] }}</span>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,247 @@
+@use '@angular/material' as mat;
+
+// Incluir los estilos core comunes de Material
+@include mat.core();
+
+// Definir paleta primaria (Gris Neutro)
+$custom-primary-palette: (
+  50: #F7FAFC,
+  100: #EDF2F7,
+  200: #E2E8F0,
+  300: #CBD5E0,
+  400: #A0AEC0,
+  500: #718096, // Gris medio principal
+  600: #4A5568, // Gris oscuro
+  700: #2D3748,
+  800: #1A202C,
+  900: #171923,
+  A100: #F7FAFC,
+  A200: #E2E8F0,
+  A400: #A0AEC0,
+  A700: #2D3748,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #FFFFFF, // Texto blanco sobre gris medio
+    600: #FFFFFF,
+    700: #FFFFFF,
+    800: #FFFFFF,
+    900: #FFFFFF,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #FFFFFF,
+  )
+);
+
+// Definir paleta accent (Gris)
+$custom-accent-palette: (
+  50: #f5f7f6,
+  100: #e6eae8,
+  200: #d6ddd9,
+  300: #c6cfca,
+  400: #bac5bf,
+  500: #BDC9C3, // Gris principal
+  600: #a8b5af,
+  700: #8f9e97,
+  800: #77877f,
+  900: #5f6f67,
+  A100: #f5f7f6,
+  A200: #d6ddd9,
+  A400: #bac5bf,
+  A700: #8f9e97,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #000000, // Texto negro sobre gris
+    600: #000000,
+    700: #000000,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  )
+);
+
+// Definir paleta de advertencia (Negro/Amarillo)
+$custom-warn-palette: (
+  50: #e6e6e6,
+  100: #c2c2c2,
+  200: #999999,
+  300: #707070,
+  400: #525252,
+  500: #000000, // Negro
+  600: #000000,
+  700: #000000,
+  800: #000000,
+  900: #000000,
+  A100: #FFE83D,
+  A200: #F0D800,
+  A400: #d4bb00,
+  A700: #b8a000,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #ffffff,
+    400: #ffffff,
+    500: #FFE83D, // Texto amarillo sobre negro
+    600: #FFE83D,
+    700: #FFE83D,
+    800: #FFE83D,
+    900: #FFE83D,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  )
+);
+
+// Crear las paletas de Material
+$app-primary: mat.define-palette($custom-primary-palette, 600);
+$app-accent: mat.define-palette($custom-accent-palette, 500);
+$app-warn: mat.define-palette($custom-warn-palette, 500);
+
+// Crear el tema claro
+$app-theme: mat.define-light-theme((
+  color: (
+    primary: $app-primary,
+    accent: $app-accent,
+    warn: $app-warn,
+  ),
+  typography: mat.define-typography-config(
+    $font-family: 'Roboto, "Helvetica Neue", sans-serif',
+  ),
+  density: 0,
+));
+
+// Incluir el tema en todos los componentes
+@include mat.all-component-themes($app-theme);
+
+// Estilos personalizados adicionales para el tema
+.mat-toolbar {
+  background: rgba(26, 32, 44, 0.85) !important;
+  color: #FFFFFF !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.mat-raised-button.mat-primary {
+  background-color: rgba(113, 128, 150, 0.9) !important;
+  color: #FFFFFF !important;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  
+  &:hover {
+    background-color: rgba(74, 85, 104, 0.95) !important;
+  }
+}
+
+.mat-flat-button.mat-primary {
+  background-color: rgba(113, 128, 150, 0.9) !important;
+  color: #FFFFFF !important;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  
+  &:hover {
+    background-color: rgba(74, 85, 104, 0.95) !important;
+  }
+}
+
+.mat-icon-button.mat-primary {
+  color: #A0AEC0 !important;
+}
+
+.mat-mdc-outlined-button.mat-primary {
+  border-color: #718096 !important;
+  color: #718096 !important;
+  
+  &:hover {
+    background-color: rgba(113, 128, 150, 0.1) !important;
+  }
+}
+
+// Chips personalizados
+.mat-mdc-chip.mat-primary {
+  background: rgba(226, 232, 240, 0.6) !important;
+  color: #2D3748 !important;
+  border: 1px solid #CBD5E0 !important;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+// Form fields personalizados
+.mat-mdc-form-field {
+  .mat-mdc-text-field-wrapper {
+    .mat-mdc-form-field-focus-overlay {
+      background-color: transparent !important;
+    }
+  }
+  
+  &.mat-focused {
+    .mat-mdc-notched-outline {
+      .mat-mdc-notched-outline-leading,
+      .mat-mdc-notched-outline-notch,
+      .mat-mdc-notched-outline-trailing {
+        border-color: #718096 !important;
+      }
+    }
+    
+    label {
+      color: #718096 !important;
+    }
+  }
+}
+
+// Select personalizados
+.mat-mdc-select {
+  &.mat-focused {
+    .mat-mdc-select-arrow {
+      color: #718096 !important;
+    }
+  }
+}
+
+// Progress spinner
+.mat-mdc-progress-spinner {
+  circle {
+    stroke: #718096 !important;
+  }
+}
+
+// Snackbar
+.mat-mdc-snack-bar-container {
+  &.snackbar-success {
+    --mdc-snackbar-container-color: rgba(45, 55, 72, 0.95) !important;
+    --mdc-snackbar-supporting-text-color: #FFFFFF !important;
+    border: 2px solid #718096;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  
+  &.snackbar-error {
+    --mdc-snackbar-container-color: rgba(226, 232, 240, 0.95) !important;
+    --mdc-snackbar-supporting-text-color: #1A202C !important;
+    border: 2px solid #CBD5E0;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+}
+
+// Dialog personalizados
+.mat-mdc-dialog-container {
+  .mdc-dialog__surface {
+    background-color: #ffffff !important;
+  }
+}
+

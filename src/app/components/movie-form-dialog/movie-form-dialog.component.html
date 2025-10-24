@@ -1,0 +1,113 @@
+<h2 mat-dialog-title>{{ isEditMode ? 'Editar Película' : 'Agregar Nueva Película' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="movieForm" class="movie-form">
+    <!-- Title -->
+    <mat-form-field appearance="outline">
+      <mat-label>Título</mat-label>
+      <input matInput formControlName="title" placeholder="Ingresa el título de la película" required>
+      <mat-icon matPrefix>movie</mat-icon>
+      <mat-error *ngIf="movieForm.get('title')?.invalid && movieForm.get('title')?.touched">
+        {{ getErrorMessage('title') }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Description -->
+    <mat-form-field appearance="outline">
+      <mat-label>Descripción</mat-label>
+      <textarea matInput formControlName="description" rows="4" placeholder="Ingresa la descripción de la película" required></textarea>
+      <mat-icon matPrefix>description</mat-icon>
+      <mat-error *ngIf="movieForm.get('description')?.invalid && movieForm.get('description')?.touched">
+        {{ getErrorMessage('description') }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Year and Rating Row -->
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Año</mat-label>
+        <input matInput type="number" formControlName="year" placeholder="2023" required>
+        <mat-icon matPrefix>calendar_today</mat-icon>
+        <mat-error *ngIf="movieForm.get('year')?.invalid && movieForm.get('year')?.touched">
+          {{ getErrorMessage('year') }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Calificación</mat-label>
+        <input matInput type="text" formControlName="rating" placeholder="8.5" required>
+        <mat-icon matPrefix>star</mat-icon>
+        <mat-error *ngIf="movieForm.get('rating')?.invalid && movieForm.get('rating')?.touched">
+          {{ getErrorMessage('rating') }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Genre -->
+    <mat-form-field appearance="outline">
+      <mat-label>Géneros</mat-label>
+      <mat-select formControlName="genre" multiple required>
+        <mat-option *ngFor="let genre of availableGenres" [value]="genre">
+          {{ genre }}
+        </mat-option>
+      </mat-select>
+      <mat-icon matPrefix>category</mat-icon>
+      <mat-error *ngIf="movieForm.get('genre')?.invalid && movieForm.get('genre')?.touched">
+        {{ getErrorMessage('genre') }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Image URL -->
+    <mat-form-field appearance="outline">
+      <mat-label>URL de Imagen</mat-label>
+      <input matInput formControlName="image" placeholder="https://ejemplo.com/imagen.jpg" required>
+      <mat-icon matPrefix>image</mat-icon>
+      <mat-error *ngIf="movieForm.get('image')?.invalid && movieForm.get('image')?.touched">
+        {{ getErrorMessage('image') }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Large Image URL (Optional) -->
+    <mat-form-field appearance="outline">
+      <mat-label>URL de Imagen Grande (Opcional)</mat-label>
+      <input matInput formControlName="big_image" placeholder="https://ejemplo.com/imagen-grande.jpg">
+      <mat-icon matPrefix>photo_size_select_large</mat-icon>
+      <mat-error *ngIf="movieForm.get('big_image')?.invalid && movieForm.get('big_image')?.touched">
+        {{ getErrorMessage('big_image') }}
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Director (Optional) -->
+    <mat-form-field appearance="outline">
+      <mat-label>Director (Opcional)</mat-label>
+      <input matInput formControlName="director" placeholder="Christopher Nolan, Steven Spielberg">
+      <mat-icon matPrefix>person</mat-icon>
+      <mat-hint>Separa múltiples directores con comas</mat-hint>
+    </mat-form-field>
+
+    <!-- Writers (Optional) -->
+    <mat-form-field appearance="outline">
+      <mat-label>Escritores (Opcional)</mat-label>
+      <input matInput formControlName="writers" placeholder="Nombres de escritores separados por comas">
+      <mat-icon matPrefix>edit</mat-icon>
+      <mat-hint>Separa múltiples escritores con comas</mat-hint>
+    </mat-form-field>
+
+    <!-- IMDB Link (Optional) -->
+    <mat-form-field appearance="outline">
+      <mat-label>Enlace IMDB (Opcional)</mat-label>
+      <input matInput formControlName="imdb_link" placeholder="https://www.imdb.com/title/...">
+      <mat-icon matPrefix>link</mat-icon>
+      <mat-error *ngIf="movieForm.get('imdb_link')?.invalid && movieForm.get('imdb_link')?.touched">
+        {{ getErrorMessage('imdb_link') }}
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" type="button">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="!movieForm.valid" type="button">
+    {{ isEditMode ? 'Actualizar' : 'Crear' }}
+  </button>
+</mat-dialog-actions>
