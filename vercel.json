@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "public": false,
+  "buildCommand": "npm run build -- --configuration production",
+  "outputDirectory": "dist/challenge-angular",
+  "devCommand": "ng serve --port $PORT",
+  "framework": null,
+  "installCommand": "npm install",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
+

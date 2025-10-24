@@ -1,0 +1,11 @@
+node_modules
+.angular
+.vscode
+*.log
+.DS_Store
+coverage
+.nyc_output
+.git
+*.spec.ts
+karma.conf.js
+
